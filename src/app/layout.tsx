@@ -1,19 +1,7 @@
-import { AUTH_COOKIE } from '@/utils';
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import { cookies } from 'next/headers';
-import Link from 'next/link';
-import { logout } from './actions';
+import Footer from './footer';
 import './globals.css';
-
-const geistSans = localFont({
-	src: './fonts/GeistVF.woff',
-	variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-	src: './fonts/GeistMonoVF.woff',
-	variable: '--font-geist-mono',
-});
+import Navbar from './navbar';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -23,31 +11,12 @@ export const metadata: Metadata = {
 type RootLayoutProps = Readonly<{ children: React.ReactNode }>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-	const cookie = cookies().get(AUTH_COOKIE);
-
-	const auth = cookie ? JSON.parse(cookie.value) : null;
-
 	return (
 		<html lang="en">
-			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				<nav className="navbar font-sans">
-					<div>
-						{!auth && (
-							<Link href="/register" className="btn">
-								Get Started
-							</Link>
-						)}
-						{auth && (
-							<form action={logout}>
-								<button type="submit" className="btn">
-									Log Out
-								</button>
-							</form>
-						)}
-					</div>
-				</nav>
-
+			<body className="font-sans">
+				<Navbar />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	);

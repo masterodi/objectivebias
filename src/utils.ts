@@ -1,5 +1,5 @@
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
 import { ClientResponseError } from 'pocketbase';
 
 const INVALID_LENGTH_CODE = 'validation_length_out_of_range';
@@ -52,8 +52,14 @@ export const AuthCookieOptions: Partial<ResponseCookie> = {
 	httpOnly: true,
 };
 
-export function getAuthToken(request: NextRequest) {
-	const authCookie = request.cookies.get(AUTH_COOKIE);
+export function getAuthToken() {
+	const authCookie = cookies().get(AUTH_COOKIE);
 	const token = authCookie?.value ? JSON.parse(authCookie.value).token : null;
 	return token;
+}
+
+export function getAuth() {
+	const authCookie = cookies().get(AUTH_COOKIE);
+	const model = authCookie?.value ? JSON.parse(authCookie.value).model : null;
+	return model;
 }

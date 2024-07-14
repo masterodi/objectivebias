@@ -10,7 +10,7 @@ export default function Register() {
 	const [state, registerAction, isPending] = useActionState(register, {});
 
 	return (
-		<div className="grid min-h-screen place-items-center font-sans">
+		<div className="grid min-h-screen place-items-center p-4">
 			<form
 				action={registerAction}
 				className="mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"

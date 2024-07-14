@@ -1,55 +1,73 @@
 'use server';
 
 import pb from '@/pocketbase';
-import { AUTH_COOKIE } from '@/utils';
+import { LoginForm, RegisterForm, safeValidate } from '@/schemas';
+import { AUTH_COOKIE, AuthCookieOptions, maybeGetError } from '@/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function login(formData: FormData) {
-	'use server';
-	const data = {
-		username: formData.get('username') as string,
-		password: formData.get('password') as string,
-	};
-	const { token, record: model } = await pb
-		.collection('users')
-		.authWithPassword(data.username, data.password);
+export type ActionState = {
+	payload?: Record<string, FormDataEntryValue | null>;
+	validationErrors?: Record<string, string[]>;
+	error?: string | null;
+};
 
-	const cookie = JSON.stringify({ token, model });
+const LOGIN_ERROR_MESSAGE =
+	'Failed to authenticate. Please check your credentials.';
 
-	cookies().set(AUTH_COOKIE, cookie, {
-		secure: true,
-		path: '/',
-		sameSite: 'strict',
-		httpOnly: true,
-	});
+export async function login(prevState: ActionState, formData: FormData) {
+	const value = Object.fromEntries(formData);
 
-	redirect('/');
+	const [data, error] = await safeValidate(value, LoginForm);
+
+	if (error) return { validationErrors: error, payload: value };
+
+	try {
+		const { token, record: model } = await pb
+			.collection('users')
+			.authWithPassword(data.username, data.password);
+
+		const cookie = JSON.stringify({ token, model });
+		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
+
+		redirect('/');
+		return {};
+	} catch (err) {
+		return {
+			error: maybeGetError(err, LOGIN_ERROR_MESSAGE),
+			payload: value,
+		};
+	}
 }
 
-export async function register(formData: FormData) {
-	'use server';
-	const data = {
-		email: formData.get('email') as string,
-		username: formData.get('username') as string,
-		password: formData.get('password') as string,
-		passwordConfirm: formData.get('password-confirm') as string,
-	};
-	await pb.collection('users').create(data);
-	const { token, record: model } = await pb
-		.collection('users')
-		.authWithPassword(data.username, data.password);
+const REGISTER_ERROR_MESSAGE =
+	'Something went wrong when creating an account. Please try again.';
 
-	const cookie = JSON.stringify({ token, model });
+export async function register(prevState: ActionState, formData: FormData) {
+	const value = Object.fromEntries(formData.entries());
 
-	cookies().set(AUTH_COOKIE, cookie, {
-		secure: true,
-		path: '/',
-		sameSite: 'strict',
-		httpOnly: true,
-	});
+	const [data, error] = await safeValidate(value, RegisterForm);
 
-	redirect('/');
+	if (error) return { validationErrors: error, payload: value };
+
+	try {
+		await pb.collection('users').create(data);
+
+		const { token, record: model } = await pb
+			.collection('users')
+			.authWithPassword(data.username, data.password);
+
+		const cookie = JSON.stringify({ token, model });
+		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
+
+		redirect('/');
+		return {};
+	} catch (err) {
+		return {
+			error: maybeGetError(err, REGISTER_ERROR_MESSAGE),
+			payload: value,
+		};
+	}
 }
 
 export async function logout() {

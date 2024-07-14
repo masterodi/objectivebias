@@ -15,7 +15,7 @@ export function withAuthMiddleware(middleware: CustomMiddleware) {
 		response: NextResponse
 	) => {
 		if (isPrivateRoute(request.nextUrl.pathname)) {
-			const token = getAuthToken(request);
+			const token = getAuthToken();
 
 			if (!token || isTokenExpired(token)) {
 				const url = request.nextUrl.clone();

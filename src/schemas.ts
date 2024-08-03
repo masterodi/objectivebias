@@ -1,4 +1,4 @@
-import { object, Schema, string, ValidationError } from 'yup';
+import { array, object, Schema, string, ValidationError } from 'yup';
 
 export async function safeValidate<T>(
 	value: unknown,
@@ -36,4 +36,13 @@ export const RegisterForm = object({
 	username: string().required('Username is required'),
 	password: string().required('Password is required'),
 	passwordConfirm: string().required('Confirm Password is required'),
+});
+
+export const CreatePostFormSchema = object({
+	title: string().required('Title is required'),
+	body: string().required('Body is required'),
+	tags: array(object({ value: string().required() })).min(
+		1,
+		'Please assign at least 1 tag'
+	),
 });

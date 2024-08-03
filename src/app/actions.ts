@@ -1,8 +1,8 @@
 'use server';
 
-import pb from '@/pocketbase';
+import pb, { Err } from '@/pocketbase';
 import { LoginForm, RegisterForm, safeValidate } from '@/schemas';
-import { AUTH_COOKIE, AuthCookieOptions, maybeGetError } from '@/utils';
+import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -11,9 +11,6 @@ export type ActionState = {
 	validationErrors?: Record<string, string[]>;
 	error?: string | null;
 };
-
-const LOGIN_ERROR_MESSAGE =
-	'Failed to authenticate. Please check your credentials.';
 
 export async function login(prevState: ActionState, formData: FormData) {
 	const value = Object.fromEntries(formData);
@@ -34,14 +31,11 @@ export async function login(prevState: ActionState, formData: FormData) {
 		return {};
 	} catch (err) {
 		return {
-			error: maybeGetError(err, LOGIN_ERROR_MESSAGE),
+			error: Err.auth().fromUnknown(err).message,
 			payload: value,
 		};
 	}
 }
-
-const REGISTER_ERROR_MESSAGE =
-	'Something went wrong when creating an account. Please try again.';
 
 export async function register(prevState: ActionState, formData: FormData) {
 	const value = Object.fromEntries(formData.entries());
@@ -64,7 +58,7 @@ export async function register(prevState: ActionState, formData: FormData) {
 		return {};
 	} catch (err) {
 		return {
-			error: maybeGetError(err, REGISTER_ERROR_MESSAGE),
+			error: Err.auth().fromUnknown(err).message,
 			payload: value,
 		};
 	}

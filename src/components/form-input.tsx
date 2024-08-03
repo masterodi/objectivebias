@@ -11,12 +11,16 @@ export default function FormInput(props: FormInputProps) {
 
 	return (
 		<div className="grid w-full">
-			{label && <label htmlFor={id}>{label}</label>}
+			{label && (
+				<label htmlFor={id} className="mb-1">
+					{label}
+				</label>
+			)}
 			<input
 				type={type}
 				name={name}
 				id={id}
-				className={`input ${error && 'input-error'} w-full`}
+				className={`input input-bordered ${error && 'input-error'} w-full`}
 				defaultValue={defaultValue}
 			/>
 			<FormError error={error} />

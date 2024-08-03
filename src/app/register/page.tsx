@@ -41,7 +41,7 @@ export default function Register() {
 					error={state.validationErrors?.['password']?.[0]}
 				/>
 				<FormInput
-					type="text"
+					type="password"
 					name="passwordConfirm"
 					id="password-confirm"
 					defaultValue={state.payload?.passwordConfirm as string}

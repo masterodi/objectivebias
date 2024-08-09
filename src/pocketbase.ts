@@ -50,10 +50,7 @@ class AuthError extends RequestError {
 			return new AuthError('Passwords do not match.');
 		}
 
-		if (
-			error.url.includes('/auth-with-password') &&
-			error.response?.message
-		) {
+		if (error.url.includes('/auth-with-password')) {
 			return new AuthError(
 				'Failed to authenticate. Please check your credentials and try again.'
 			);

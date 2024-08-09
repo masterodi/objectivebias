@@ -1,9 +1,9 @@
 'use client';
 
 import AutocompleteInput from '@/components/autocomplete-input';
-import FormError from '@/components/form-error';
 import FormInput from '@/components/form-input';
-import { useActionState, useState } from 'react';
+import { useToast } from '@/components/toast';
+import { useActionState, useEffect, useState } from 'react';
 import { createPost } from '../../actions';
 
 type CreatePostFormProps = {
@@ -17,6 +17,11 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 		createPost.bind(null, value),
 		{}
 	);
+	const toast = useToast();
+
+	useEffect(() => {
+		if (state.error) toast.error(state.error);
+	}, [state]);
 
 	return (
 		<form
@@ -48,7 +53,6 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 				error={state.validationErrors?.['tags']?.[0]}
 				addOptionMessage="+ Add a new tag"
 			/>
-			<FormError error={state.error} />
 			<button type="submit" className="btn btn-primary">
 				Publish
 			</button>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Footer from './footer';
 import './globals.css';
 import Navbar from './navbar';
+import Providers from './providers';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -14,9 +15,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 	return (
 		<html lang="en">
 			<body className="font-sans">
-				<Navbar />
-				{children}
-				<Footer />
+				<Providers>
+					<Navbar />
+					{children}
+					<Footer />
+				</Providers>
 			</body>
 		</html>
 	);

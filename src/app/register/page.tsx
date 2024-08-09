@@ -1,13 +1,18 @@
 'use client';
 
-import FormError from '@/components/form-error';
 import FormInput from '@/components/form-input';
+import { useToast } from '@/components/toast';
 import Link from 'next/link';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { register } from '../actions';
 
 export default function Register() {
 	const [state, registerAction, isPending] = useActionState(register, {});
+	const toast = useToast();
+
+	useEffect(() => {
+		if (state.error) toast.error(state.error);
+	}, [state]);
 
 	return (
 		<div className="grid min-h-screen place-items-center p-4">
@@ -48,7 +53,6 @@ export default function Register() {
 					label="Confirm Password"
 					error={state.validationErrors?.['passwordConfirm']?.[0]}
 				/>
-				<FormError error={state.error} />
 				<button
 					type="submit"
 					disabled={isPending}

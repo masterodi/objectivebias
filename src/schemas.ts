@@ -46,3 +46,14 @@ export const CreatePostFormSchema = object({
 		'Please assign at least 1 tag'
 	),
 });
+
+export const PostSchema = object({
+	id: string().required(),
+	title: string().required(),
+	slug: string().required(),
+	body: string().required(),
+	created_by: string().required(),
+	tags: array(string().required()).required(),
+	created: string().datetime().required(),
+	updated: string().datetime().required(),
+});

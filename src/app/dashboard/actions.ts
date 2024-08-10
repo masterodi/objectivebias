@@ -2,7 +2,7 @@
 
 import pb, { Err } from '@/pocketbase';
 import { CreatePostFormSchema, safeValidate } from '@/schemas';
-import { getAuth } from '@/utils';
+import { createSlug, getAuth } from '@/utils';
 import { redirect } from 'next/navigation';
 
 export type ActionState = {
@@ -24,9 +24,9 @@ export const createPost = async (
 
 	try {
 		const auth = getAuth();
-
 		await pb.collection('posts').create({
 			...data,
+			slug: createSlug(data.title),
 			created_by: auth.id,
 			tags: data.tags?.map((tag) => tag.value),
 		});

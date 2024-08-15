@@ -1,7 +1,7 @@
+import { getPosts } from '@/app/(posts)/queries';
 import { PostSchema } from '@/schemas';
-import { getPosts } from '../queries';
 
-export default async function PostsTable() {
+async function PostsTable() {
 	const posts = await getPosts();
 	const columns = Object.keys(
 		PostSchema.fields
@@ -31,5 +31,13 @@ export default async function PostsTable() {
 				))}
 			</tbody>
 		</table>
+	);
+}
+
+export default function DashboardHome() {
+	return (
+		<div className="p-4">
+			<PostsTable />
+		</div>
 	);
 }

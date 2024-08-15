@@ -1,4 +1,4 @@
-import { getPostBySlug } from '@/app/queries';
+import { getPostBySlug } from '../../queries';
 
 type PostProps = {
 	params: { slug: string };
@@ -10,7 +10,7 @@ export default async function Post(props: PostProps) {
 	});
 
 	return (
-		<main className="mx-auto my-12 w-full max-w-5xl p-4">
+		<main className="mx-auto my-12 min-h-screen w-full max-w-5xl p-4">
 			<header className="mb-12">
 				<h1 className="mb-2 text-4xl font-bold">{post.title}</h1>
 				<div className="mb-4 flex gap-2">

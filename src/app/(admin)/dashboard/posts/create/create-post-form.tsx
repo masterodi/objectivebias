@@ -1,10 +1,10 @@
 'use client';
 
+import { createPost } from '@/app/(posts)/actions';
 import AutocompleteInput from '@/components/autocomplete-input';
 import FormInput from '@/components/form-input';
 import { useToast } from '@/components/toast';
 import { useActionState, useEffect, useState } from 'react';
-import { createPost } from '../../actions';
 
 type CreatePostFormProps = {
 	options: any;

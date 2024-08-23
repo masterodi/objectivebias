@@ -1,6 +1,6 @@
-import { getAuth } from '@/utils';
 import Link from 'next/link';
-import { logout } from './(authentication)/actions';
+import logout from './actions/logout';
+import { getAuth } from './queries/getAuth';
 
 function GuestNavbar() {
 	return (

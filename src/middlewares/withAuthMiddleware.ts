@@ -1,4 +1,4 @@
-import { getAuthToken } from '@/utils';
+import { getAuthToken } from '@/app/queries/getAuth';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { isTokenExpired } from 'pocketbase';
 import { CustomMiddleware } from './chain';

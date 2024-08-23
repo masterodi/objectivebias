@@ -1,12 +1,13 @@
 'use client';
 
+import login from '@/app/actions/login';
 import FormInput from '@/components/form-input';
 import { useToast } from '@/components/toast';
-import { useActionState, useEffect } from 'react';
-import { login } from '../actions';
+import { useEffect } from 'react';
+import { useFormState } from 'react-dom';
 
 export default function Login() {
-	const [state, loginAction, isPending] = useActionState(login, {});
+	const [state, loginAction, isPending] = useFormState(login, {});
 	const toast = useToast();
 
 	useEffect(() => {

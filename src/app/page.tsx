@@ -2,7 +2,7 @@ import { PostSchema } from '@/schemas';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 import { InferType } from 'yup';
-import { getPosts } from './(posts)/queries';
+import getPosts from './queries/getPosts';
 
 type PostCardProps = {
 	post: InferType<typeof PostSchema>;

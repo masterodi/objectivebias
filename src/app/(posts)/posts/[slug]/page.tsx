@@ -1,4 +1,4 @@
-import { getPostBySlug } from '../../queries';
+import getPostBySlug from '@/app/queries/getPostBySlug';
 
 type PostProps = {
 	params: { slug: string };

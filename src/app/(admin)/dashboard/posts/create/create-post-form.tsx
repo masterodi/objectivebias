@@ -1,6 +1,6 @@
 'use client';
 
-import { createPost } from '@/app/(posts)/actions';
+import createPost from '@/app/actions/createPost';
 import AutocompleteInput from '@/components/autocomplete-input';
 import FormInput from '@/components/form-input';
 import { useToast } from '@/components/toast';

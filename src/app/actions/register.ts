@@ -1,7 +1,8 @@
 'use server';
 
-import pb, { Err } from '@/pocketbase';
-import { RegisterForm, safeValidate } from '@/schemas';
+import { AuthError } from '@/errors';
+import pb from '@/pocketbase';
+import { RegisterPayloadSchema, safeValidate } from '@/schemas';
 import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -13,7 +14,7 @@ export default async function register(
 ) {
 	const value = Object.fromEntries(formData.entries());
 
-	const [data, error] = await safeValidate(value, RegisterForm);
+	const [data, error] = await safeValidate(value, RegisterPayloadSchema);
 
 	if (error) return { validationErrors: error, payload: value };
 
@@ -28,10 +29,9 @@ export default async function register(
 		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
 
 		redirect('/');
-		return {};
 	} catch (err) {
 		return {
-			error: Err.auth().fromUnknown(err).message,
+			error: new AuthError().fromUnknown(err).message,
 			payload: value,
 		};
 	}

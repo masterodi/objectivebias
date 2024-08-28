@@ -1,7 +1,8 @@
 'use server';
 
-import pb, { Err } from '@/pocketbase';
-import { LoginForm, safeValidate } from '@/schemas';
+import { AuthError } from '@/errors';
+import pb from '@/pocketbase';
+import { LoginPayloadSchema, safeValidate } from '@/schemas';
 import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -13,7 +14,7 @@ export default async function login(
 ) {
 	const value = Object.fromEntries(formData);
 
-	const [data, error] = await safeValidate(value, LoginForm);
+	const [data, error] = await safeValidate(value, LoginPayloadSchema);
 
 	if (error) return { validationErrors: error, payload: value };
 
@@ -29,7 +30,7 @@ export default async function login(
 		return {};
 	} catch (err) {
 		return {
-			error: Err.auth().fromUnknown(err).message,
+			error: new AuthError().fromUnknown(err).message,
 			payload: value,
 		};
 	}

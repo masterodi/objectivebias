@@ -28,7 +28,7 @@ export default function Register() {
 					id="email"
 					defaultValue={state.payload?.email as string}
 					label="Email"
-					error={state.validationErrors?.['email']?.[0]}
+					error={state.validationErrors?.data.email?.[0]}
 				/>
 				<FormInput
 					type="text"
@@ -36,7 +36,7 @@ export default function Register() {
 					id="username"
 					defaultValue={state.payload?.username as string}
 					label="Username"
-					error={state.validationErrors?.['username']?.[0]}
+					error={state.validationErrors?.data.username?.[0]}
 				/>
 				<FormInput
 					type="password"
@@ -44,7 +44,7 @@ export default function Register() {
 					id="password"
 					defaultValue={state.payload?.password as string}
 					label="Password"
-					error={state.validationErrors?.['password']?.[0]}
+					error={state.validationErrors?.data.password?.[0]}
 				/>
 				<FormInput
 					type="password"
@@ -52,7 +52,7 @@ export default function Register() {
 					id="password-confirm"
 					defaultValue={state.payload?.passwordConfirm as string}
 					label="Confirm Password"
-					error={state.validationErrors?.['passwordConfirm']?.[0]}
+					error={state.validationErrors?.data.passwordConfirm?.[0]}
 				/>
 				<button
 					type="submit"

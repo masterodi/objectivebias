@@ -27,7 +27,7 @@ export default function Login() {
 					id="username"
 					defaultValue={state.payload?.username as string}
 					label="Username"
-					error={state.validationErrors?.['username']?.[0]}
+					error={state.validationErrors?.data.username?.[0]}
 				/>
 				<FormInput
 					type="password"
@@ -35,7 +35,7 @@ export default function Login() {
 					id="password"
 					defaultValue={state.payload?.password as string}
 					label="Password"
-					error={state.validationErrors?.['password']?.[0]}
+					error={state.validationErrors?.data.password?.[0]}
 				/>
 				<button
 					type="submit"

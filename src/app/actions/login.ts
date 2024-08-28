@@ -1,6 +1,6 @@
 'use server';
 
-import { AuthError } from '@/errors';
+import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { LoginPayloadSchema, safeValidate } from '@/schemas';
 import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
@@ -30,7 +30,7 @@ export default async function login(
 		return {};
 	} catch (err) {
 		return {
-			error: new AuthError().fromUnknown(err).message,
+			error: PocketbaseError.auth(err).message,
 			payload: value,
 		};
 	}

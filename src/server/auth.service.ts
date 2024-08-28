@@ -1,4 +1,4 @@
-import { AuthError } from '@/errors';
+import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { LoginPayloadSchema, RegisterPayloadSchema, validate } from '@/schemas';
 import { LoginPayload, RegisterPayload, Session } from '@/types';
@@ -16,7 +16,7 @@ async function login(payload: LoginPayload) {
 		const cookie = JSON.stringify({ token, model });
 		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
 	} catch (error) {
-		throw new AuthError().fromUnknown(error);
+		throw PocketbaseError.auth(error);
 	}
 }
 
@@ -33,7 +33,7 @@ async function register(payload: RegisterPayload) {
 		const cookie = JSON.stringify({ token, model });
 		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
 	} catch (error) {
-		throw new AuthError().fromUnknown(error);
+		throw PocketbaseError.auth(error);
 	}
 }
 

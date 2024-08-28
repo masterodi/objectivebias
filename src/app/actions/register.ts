@@ -1,6 +1,6 @@
 'use server';
 
-import { AuthError } from '@/errors';
+import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { RegisterPayloadSchema, safeValidate } from '@/schemas';
 import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
@@ -31,7 +31,7 @@ export default async function register(
 		redirect('/');
 	} catch (err) {
 		return {
-			error: new AuthError().fromUnknown(err).message,
+			error: PocketbaseError.auth(err).message,
 			payload: value,
 		};
 	}

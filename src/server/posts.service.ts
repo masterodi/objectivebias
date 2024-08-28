@@ -1,4 +1,4 @@
-import { PostsError } from '@/errors';
+import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { CreatePostPayloadSchema, safeValidate } from '@/schemas';
 import { CreatePostPayload, Post } from '@/types';
@@ -38,7 +38,7 @@ async function create(payload: CreatePostPayload) {
 		const res = await pb.collection('posts').create(data);
 		return { data: res };
 	} catch (error) {
-		throw new PostsError().fromUnknown(error);
+		throw PocketbaseError.posts(error);
 	}
 }
 

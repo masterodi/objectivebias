@@ -1,6 +1,6 @@
 'use server';
 
-import { PostsError } from '@/errors';
+import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { CreatePostPayloadSchema, safeValidate } from '@/schemas';
 import { createSlug } from '@/utils';
@@ -25,7 +25,7 @@ export default async function createPost(formData: FormData) {
 		redirect('/dashboard');
 	} catch (err) {
 		return {
-			error: new PostsError().fromUnknown(err).message,
+			error: PocketbaseError.posts(error).message,
 			payload: value,
 		};
 	}

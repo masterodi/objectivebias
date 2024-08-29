@@ -1,28 +1,32 @@
-import { ChangeEventHandler, MouseEventHandler, useRef } from 'react';
+import { ChangeEventHandler, MouseEventHandler } from 'react';
 import FormError from '../form-error';
-import AutocompleteDropdownContent from './autocomplete-dropdown-content';
 import { AutocompleteInputProps, AutocompleteOption } from './types';
 import { defaultGetOptionLabel, defaultGetOptionValue } from './utils';
 
 export default function SimpleAutocompleteInput<T>(
 	props: AutocompleteInputProps<T, false>
 ) {
-	const { label, id, type, name, inputValue, onInputChange } = props;
-	const { defaultValue, value, onChange, error } = props;
 	const {
+		label,
+		id,
+		type,
+		name,
+		inputValue,
+		onInputChange,
+		defaultValue,
+		value,
+		onChange,
+		error,
 		options,
 		getOptionLabel = defaultGetOptionLabel,
 		getOptionValue = defaultGetOptionValue,
-		addOptionMessage,
-		onAddOptionClick,
 	} = props;
-	const dropdownRef = useRef<HTMLUListElement>(null);
-
 	const filteredOptions = options.filter((option) =>
 		getOptionLabel(option)
 			.toLowerCase()
 			.includes(String(inputValue).toLowerCase())
 	);
+	const hasOptions = filteredOptions.length > 0;
 
 	const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		onInputChange?.(event.target.value);
@@ -57,14 +61,25 @@ export default function SimpleAutocompleteInput<T>(
 					/>
 					<FormError error={error} />
 				</div>
-				<AutocompleteDropdownContent
-					ref={dropdownRef}
-					options={filteredOptions}
-					getOptionLabel={getOptionLabel}
-					onOptionClick={handleOptionClick}
-					addOptionMessage={addOptionMessage}
-					onAddOptionClick={onAddOptionClick}
-				/>
+				<div className="dropdown-content z-[1] mt-1 max-h-80 w-full flex-nowrap overflow-auto rounded-box bg-base-100 p-2 shadow">
+					<ul tabIndex={0} className="menu">
+						{hasOptions &&
+							filteredOptions.map((option, index) => (
+								<li
+									key={getOptionLabel(option)}
+									tabIndex={index + 1}
+									className="text-lg"
+								>
+									<button
+										type="button"
+										onClick={handleOptionClick(option)}
+									>
+										{getOptionLabel(option)}
+									</button>
+								</li>
+							))}
+					</ul>
+				</div>
 			</div>
 		</div>
 	);

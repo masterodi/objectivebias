@@ -5,7 +5,6 @@ import {
 	useRef,
 } from 'react';
 import FormError from '../form-error';
-import AutocompleteDropdownContent from './autocomplete-dropdown-content';
 import { AutocompleteInputProps, AutocompleteOption } from './types';
 import { defaultGetOptionLabel, defaultGetOptionValue } from './utils';
 
@@ -37,9 +36,9 @@ function OptionBadge<T>(props: OptionBadgeProps<T>) {
 					className="inline-block h-3 w-3 stroke-current"
 				>
 					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth="2"
 						d="M6 18L18 6M6 6l12 12"
 					></path>
 				</svg>
@@ -51,20 +50,27 @@ function OptionBadge<T>(props: OptionBadgeProps<T>) {
 export default function MultipleAutocompleteInput<T>(
 	props: AutocompleteInputProps<T, true>
 ) {
-	const { label, id, type, name, inputValue, onInputChange } = props;
-	const { defaultValue, value, onChange, error } = props;
 	const {
+		label,
+		id,
+		type,
+		name,
+		inputValue,
+		onInputChange,
+		defaultValue,
+		value,
+		onChange,
+		error,
 		options,
 		getOptionLabel = defaultGetOptionLabel,
 		getOptionValue = defaultGetOptionValue,
-		addOptionMessage,
-		onAddOptionClick,
 	} = props;
 	const dropdownRef = useRef<HTMLUListElement>(null);
 	const innerValue = value ?? defaultValue;
 
-	const filteredOptions = innerValue
-		? options.filter(
+	const filteredOptions =
+		innerValue ?
+			options.filter(
 				(option) =>
 					getOptionLabel(option)
 						.toLowerCase()
@@ -73,7 +79,7 @@ export default function MultipleAutocompleteInput<T>(
 						(x) => getOptionLabel(x) === getOptionLabel(option)
 					)
 			)
-		: options.filter((option) =>
+		:	options.filter((option) =>
 				getOptionLabel(option)
 					.toLowerCase()
 					.includes(String(inputValue).toLowerCase())
@@ -137,14 +143,25 @@ export default function MultipleAutocompleteInput<T>(
 					/>
 					<FormError error={error} />
 				</div>
-				<AutocompleteDropdownContent
-					ref={dropdownRef}
-					options={filteredOptions}
-					getOptionLabel={getOptionLabel}
-					onOptionClick={handleOptionClick}
-					addOptionMessage={addOptionMessage}
-					onAddOptionClick={onAddOptionClick}
-				/>
+				<div className="dropdown-content z-[1] mt-1 max-h-80 w-full flex-nowrap overflow-auto rounded-box bg-base-100 p-2 shadow">
+					<ul ref={dropdownRef} tabIndex={0} className="menu">
+						{hasOptions &&
+							filteredOptions.map((option, index) => (
+								<li
+									key={getOptionLabel(option)}
+									tabIndex={index + 1}
+									className="text-lg"
+								>
+									<button
+										type="button"
+										onClick={handleOptionClick(option)}
+									>
+										{getOptionLabel(option)}
+									</button>
+								</li>
+							))}
+					</ul>
+				</div>
 			</div>
 		</div>
 	);

@@ -1,4 +1,4 @@
-import { getAuthToken } from '@/app/queries/getAuth';
+import AuthService from '@/server/auth.service';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { isTokenExpired } from 'pocketbase';
 import { CustomMiddleware } from './chain';
@@ -15,7 +15,7 @@ export function withGuestMiddleware(middleware: CustomMiddleware) {
 		response: NextResponse
 	) => {
 		if (isGuestRoute(request.nextUrl.pathname)) {
-			const token = getAuthToken();
+			const token = AuthService.token();
 
 			if (token && !isTokenExpired(token)) {
 				const url = request.nextUrl.clone();

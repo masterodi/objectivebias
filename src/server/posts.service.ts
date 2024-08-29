@@ -26,6 +26,23 @@ async function getOne(id: string, options?: any) {
 	return data;
 }
 
+async function getFiltered(filters: any, options?: any) {
+	const queryOptions: RecordFullListOptions = {
+		sort: '-created',
+		expand: options?.with?.join(','),
+	};
+
+	if (filters?.slug) {
+		const data = await pb
+			.collection('posts')
+			.getFirstListItem(`slug="${filters.slug}"`, queryOptions);
+		return data;
+	}
+
+	const data = await pb.collection<Post>('posts').getFullList();
+	return data;
+}
+
 async function create(payload: CreatePostPayload) {
 	try {
 		const [data, validationError] = await safeValidate(
@@ -45,6 +62,7 @@ async function create(payload: CreatePostPayload) {
 const PostsService = {
 	getList,
 	getOne,
+	getFiltered,
 	create,
 };
 

@@ -1,5 +1,9 @@
-export default function FormError({ error }: { error?: string }) {
-	if (!error) return null;
+type FormErrorProps = {
+	error?: string | string[];
+};
 
-	return <div className="text-error">{error}</div>;
+export default function FormError(props: FormErrorProps) {
+	if (!props.error) return null;
+
+	return [...props.error].map((e) => <div className="text-error">{e}</div>);
 }

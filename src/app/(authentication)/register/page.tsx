@@ -1,6 +1,6 @@
 'use client';
 
-import register from '@/app/actions/register';
+import { register } from '@/app/actions/auth.actions';
 import FormInput from '@/components/form-input';
 import { useToast } from '@/components/toast';
 import Link from 'next/link';
@@ -8,11 +8,11 @@ import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
 
 export default function Register() {
-	const [state, registerAction, isPending] = useFormState(register, {});
+	const [state, registerAction, isPending] = useFormState(register, null);
 	const toast = useToast();
 
 	useEffect(() => {
-		if (state.error) toast.error(state.error);
+		if (state?.error) toast.error(state.error);
 	}, [state]);
 
 	return (
@@ -26,33 +26,33 @@ export default function Register() {
 					type="text"
 					name="email"
 					id="email"
-					defaultValue={state.payload?.email as string}
+					defaultValue={state?.payload.email ?? ''}
 					label="Email"
-					error={state.validationErrors?.data.email?.[0]}
+					error={state?.validation?.data.email}
 				/>
 				<FormInput
 					type="text"
 					name="username"
 					id="username"
-					defaultValue={state.payload?.username as string}
+					defaultValue={state?.payload.username ?? ''}
 					label="Username"
-					error={state.validationErrors?.data.username?.[0]}
+					error={state?.validation?.data.username}
 				/>
 				<FormInput
 					type="password"
 					name="password"
 					id="password"
-					defaultValue={state.payload?.password as string}
+					defaultValue={state?.payload.password ?? ''}
 					label="Password"
-					error={state.validationErrors?.data.password?.[0]}
+					error={state?.validation?.data.password}
 				/>
 				<FormInput
 					type="password"
 					name="passwordConfirm"
 					id="password-confirm"
-					defaultValue={state.payload?.passwordConfirm as string}
+					defaultValue={state?.payload.passwordConfirm ?? ''}
 					label="Confirm Password"
-					error={state.validationErrors?.data.passwordConfirm?.[0]}
+					error={state?.validation?.data.passwordConfirm}
 				/>
 				<button
 					type="submit"

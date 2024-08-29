@@ -1,14 +1,3 @@
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-
-export const AUTH_COOKIE = 'pb_auth';
-
-export const AuthCookieOptions: Partial<ResponseCookie> = {
-	secure: true,
-	path: '/',
-	sameSite: 'strict',
-	httpOnly: true,
-};
-
 export function createSlug(value: string) {
 	return value
 		.trim() // remove whitespaces at the start and end of string

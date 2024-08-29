@@ -3,11 +3,12 @@ import FormError from './form-error';
 
 type FormInputProps = InputHTMLAttributes<HTMLInputElement> & {
 	label?: string;
-	error?: string;
+	error?: string | string[];
 };
 
 export default function FormInput(props: FormInputProps) {
-	const { type, name, id, defaultValue, label, error, className } = props;
+	const { type, name, id, defaultValue, label, error, className, ...rest } =
+		props;
 
 	return (
 		<div className="grid w-full">
@@ -22,6 +23,7 @@ export default function FormInput(props: FormInputProps) {
 				id={id}
 				className={`input input-bordered ${error && 'input-error'} w-full`}
 				defaultValue={defaultValue}
+				{...rest}
 			/>
 			<FormError error={error} />
 		</div>

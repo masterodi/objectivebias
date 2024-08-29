@@ -1,5 +1,9 @@
-export type ActionState = {
-	payload?: Record<string, FormDataEntryValue | null>;
-	validationErrors?: Record<string, string[]>;
-	error?: string | null;
-};
+import { ValidationError } from '@/errors';
+
+export type ActionState<T extends object> =
+	| {
+			payload: T;
+			validation: ReturnType<ValidationError<T>['serialize']>;
+			error?: never;
+	  }
+	| { payload: T; validation?: never; error: string };

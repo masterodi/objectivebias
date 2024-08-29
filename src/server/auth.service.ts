@@ -2,8 +2,17 @@ import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { LoginPayloadSchema, RegisterPayloadSchema, validate } from '@/schemas';
 import { LoginPayload, RegisterPayload, Session } from '@/types';
-import { AUTH_COOKIE, AuthCookieOptions } from '@/utils';
+import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
+
+const AUTH_COOKIE = 'pb_auth';
+
+const AuthCookieOptions: Partial<ResponseCookie> = {
+	secure: true,
+	path: '/',
+	sameSite: 'strict',
+	httpOnly: true,
+};
 
 async function login(payload: LoginPayload) {
 	try {
@@ -37,17 +46,17 @@ async function register(payload: RegisterPayload) {
 	}
 }
 
-async function logout() {
+function logout() {
 	cookies().delete(AUTH_COOKIE);
 }
 
-async function session() {
+function session() {
 	const authCookie = cookies().get(AUTH_COOKIE);
 	const model = authCookie?.value ? JSON.parse(authCookie.value).model : null;
 	return model as Session;
 }
 
-async function token() {
+function token() {
 	const authCookie = cookies().get(AUTH_COOKIE);
 	const token = authCookie?.value ? JSON.parse(authCookie.value).token : null;
 	return token as string;

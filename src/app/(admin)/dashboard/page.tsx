@@ -1,4 +1,4 @@
-import getPosts from '@/app/queries/getPosts';
+import { getPosts } from '@/app/queries/posts.queries';
 import { PostSchema } from '@/schemas';
 
 async function PostsTable() {

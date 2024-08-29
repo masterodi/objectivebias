@@ -1,4 +1,4 @@
-import getPostBySlug from '@/app/queries/getPostBySlug';
+import { getPostBySlug } from '@/app/queries/posts.queries';
 
 type PostProps = {
 	params: { slug: string };
@@ -6,7 +6,7 @@ type PostProps = {
 
 export default async function Post(props: PostProps) {
 	const post = await getPostBySlug(props.params.slug, {
-		with: { tags: true, created_by: true },
+		with: ['tags', 'created_by'],
 	});
 
 	return (

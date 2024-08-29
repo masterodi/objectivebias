@@ -1,17 +1,17 @@
 'use client';
 
-import login from '@/app/actions/login';
+import { login } from '@/app/actions/auth.actions';
 import FormInput from '@/components/form-input';
 import { useToast } from '@/components/toast';
 import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
 
 export default function Login() {
-	const [state, loginAction, isPending] = useFormState(login, {});
+	const [state, loginAction, isPending] = useFormState(login, null);
 	const toast = useToast();
 
 	useEffect(() => {
-		if (state.error) toast.error(state.error);
+		if (state?.error) toast.error(state.error);
 	}, [state]);
 
 	return (
@@ -25,17 +25,17 @@ export default function Login() {
 					type="text"
 					name="username"
 					id="username"
-					defaultValue={state.payload?.username as string}
+					defaultValue={state?.payload.username ?? ''}
 					label="Username"
-					error={state.validationErrors?.data.username?.[0]}
+					error={state?.validation?.data.username}
 				/>
 				<FormInput
 					type="password"
 					name="password"
 					id="password"
-					defaultValue={state.payload?.password as string}
+					defaultValue={state?.payload.password ?? ''}
 					label="Password"
-					error={state.validationErrors?.data.password?.[0]}
+					error={state?.validation?.data.password}
 				/>
 				<button
 					type="submit"

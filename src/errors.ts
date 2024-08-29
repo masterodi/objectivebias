@@ -65,6 +65,10 @@ export class ValidationError<T extends object> extends RequestError {
 	serialize() {
 		return { message: this.message, data: this.data };
 	}
+
+	static is<R extends object>(error: unknown): error is ValidationError<R> {
+		return error instanceof ValidationError;
+	}
 }
 
 export class PocketbaseError extends RequestError {
@@ -110,5 +114,9 @@ export class PocketbaseError extends RequestError {
 		}
 
 		throw error;
+	}
+
+	static is(error: unknown): error is PocketbaseError {
+		return error instanceof PocketbaseError;
 	}
 }

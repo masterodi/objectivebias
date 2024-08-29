@@ -24,13 +24,6 @@ export async function validate<T extends object>(
 	}
 }
 
-export function getValidationMessage<T extends object>(
-	key: keyof T,
-	error?: { data?: { [x in keyof T]: string[] } }
-) {
-	return error?.data?.[key]?.[0];
-}
-
 export async function safeValidate<T extends object>(
 	value: unknown,
 	schema: Schema<T>

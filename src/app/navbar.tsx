@@ -1,6 +1,7 @@
+import { Session } from '@/types';
 import Link from 'next/link';
-import logout from './actions/logout';
-import { getAuth } from './queries/getAuth';
+import { logout } from './actions/auth.actions';
+import { getSession } from './queries/auth.queries';
 
 function GuestNavbar() {
 	return (
@@ -23,9 +24,7 @@ function GuestNavbar() {
 	);
 }
 
-function UserNavbar() {
-	const auth = getAuth();
-
+async function UserNavbar({ session }: { session: Session }) {
 	return (
 		<div className="drawer drawer-end">
 			<input
@@ -44,7 +43,7 @@ function UserNavbar() {
 						</Link>
 					</div>
 					<div className="navbar-end">
-						<span>{auth.username}</span>
+						<span>{session.username}</span>
 						<form action={logout}>
 							<button type="submit" className="btn btn-ghost">
 								Log Out
@@ -96,7 +95,7 @@ function UserNavbar() {
 	);
 }
 
-export default function Navbar() {
-	const auth = getAuth();
-	return !auth ? <GuestNavbar /> : <UserNavbar />;
+export default async function Navbar() {
+	const session = await getSession();
+	return !session ? <GuestNavbar /> : <UserNavbar session={session} />;
 }

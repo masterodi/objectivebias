@@ -1,7 +1,7 @@
 'use client';
 
 import { login } from '@/app/actions/auth.actions';
-import FormInput from '@/components/form-input';
+import Input from '@/components/input';
 import { useToast } from '@/components/toast';
 import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
@@ -21,7 +21,7 @@ export default function Login() {
 				className="mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
 			>
 				<h1 className="text-3xl font-bold">Enter account</h1>
-				<FormInput
+				<Input
 					type="text"
 					name="username"
 					id="username"
@@ -29,7 +29,7 @@ export default function Login() {
 					label="Username"
 					error={state?.validation?.data.username}
 				/>
-				<FormInput
+				<Input
 					type="password"
 					name="password"
 					id="password"

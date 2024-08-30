@@ -1,12 +1,12 @@
 import { InputHTMLAttributes } from 'react';
-import FormError from './form-error';
+import ErrorDisplay from './error-display';
 
-type FormInputProps = InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 	label?: string;
 	error?: string | string[];
 };
 
-export default function FormInput(props: FormInputProps) {
+export default function Input(props: InputProps) {
 	const { type, name, id, defaultValue, label, error, className, ...rest } =
 		props;
 
@@ -25,7 +25,7 @@ export default function FormInput(props: FormInputProps) {
 				defaultValue={defaultValue}
 				{...rest}
 			/>
-			<FormError error={error} />
+			<ErrorDisplay error={error} />
 		</div>
 	);
 }

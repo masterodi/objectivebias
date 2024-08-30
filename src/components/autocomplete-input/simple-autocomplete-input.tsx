@@ -1,5 +1,5 @@
 import { ChangeEventHandler, MouseEventHandler } from 'react';
-import FormError from '../form-error';
+import ErrorDisplay from '../error-display';
 import { AutocompleteInputProps, AutocompleteOption } from './types';
 import { defaultGetOptionLabel, defaultGetOptionValue } from './utils';
 
@@ -59,7 +59,7 @@ export default function SimpleAutocompleteInput<T>(
 						onChange={handleInputChange}
 						className="grow"
 					/>
-					<FormError error={error} />
+					<ErrorDisplay error={error} />
 				</div>
 				<div className="dropdown-content z-[1] mt-1 max-h-80 w-full flex-nowrap overflow-auto rounded-box bg-base-100 p-2 shadow">
 					<ul tabIndex={0} className="menu">

@@ -1,7 +1,7 @@
 import { Session } from '@/types';
 import Link from 'next/link';
-import { logout } from './actions/auth.actions';
-import { getSession } from './queries/auth.queries';
+import { logout } from '../actions/auth.actions';
+import { getSession } from '../queries/auth.queries';
 
 function GuestNavbar() {
 	return (

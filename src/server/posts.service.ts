@@ -51,6 +51,16 @@ async function create(payload: CreatePostPayload) {
 	}
 }
 
+async function update(id: string, payload: CreatePostPayload) {
+	try {
+		const data = await validate(payload, CreatePostPayloadSchema);
+		const res = await pb.collection('posts').update(id, data);
+		return { data: res };
+	} catch (error) {
+		throw PocketbaseError.posts(error);
+	}
+}
+
 async function remove(id: string) {
 	const res = await pb.collection('posts').delete(id);
 	return res;
@@ -61,6 +71,7 @@ const PostsService = {
 	getOne,
 	getFiltered,
 	create,
+	update,
 	delete: remove,
 };
 

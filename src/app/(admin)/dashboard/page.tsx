@@ -1,6 +1,7 @@
 import { deletePost } from '@/app/actions/posts.actions';
 import { getPosts } from '@/app/queries/posts.queries';
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash, View } from 'lucide-react';
+import Link from 'next/link';
 
 async function PostsTable() {
 	const posts = await getPosts();
@@ -27,12 +28,20 @@ async function PostsTable() {
 							</td>
 						))}
 						<td>
-							<button
-								type="button"
+							<Link
+								href={`/posts/${post.slug}`}
+								className="btn btn-ghost hover:text-info"
+							>
+								<View />
+							</Link>
+						</td>
+						<td>
+							<Link
+								href={`/dashboard/posts/${post.slug}`}
 								className="btn btn-ghost hover:text-info"
 							>
 								<Edit />
-							</button>
+							</Link>
 						</td>
 						<td>
 							<form

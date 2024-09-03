@@ -1,5 +1,5 @@
+import UpsertPostForm from '@/app/(posts)/upsert-post-form';
 import pb from '@/pocketbase';
-import CreatePostForm from './create-post-form';
 
 export default async function CreatePost() {
 	const data = await pb.collection('tags').getFullList();
@@ -7,7 +7,7 @@ export default async function CreatePost() {
 
 	return (
 		<div className="grid min-h-screen place-items-center">
-			<CreatePostForm options={tags} />
+			<UpsertPostForm options={tags} />
 		</div>
 	);
 }

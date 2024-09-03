@@ -1,22 +1,30 @@
 'use client';
 
-import { createPost } from '@/app/actions/posts.actions';
+import { createPost, updatePost } from '@/app/actions/posts.actions';
 import MultiAutocompleteInput from '@/components/autocomplete-input/multi-autocomplete-input';
 import { ACOption } from '@/components/autocomplete-input/types';
 import Input from '@/components/input';
 import Editor from '@/components/rich-text/editor';
 import { useToast } from '@/components/toast';
+import { PostWithTags } from '@/types';
 import { Value } from '@udecode/plate';
 import React, { useEffect, useState } from 'react';
 
-type CreatePostFormProps = {
+type UpsertPostFormProps = {
 	options: any;
+	data?: PostWithTags;
 };
 
-export default function CreatePostForm({ options }: CreatePostFormProps) {
-	const [title, setTitle] = useState('');
-	const [body, setBody] = useState([] as Value);
-	const [tags, setTags] = useState([] as ACOption<string>[]);
+export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
+	const [title, setTitle] = useState(data?.title ?? '');
+	const [body, setBody] = useState(
+		data ? JSON.parse(data.body) : ([] as Value)
+	);
+	const [tags, setTags] = useState(
+		data ?
+			data.expand.tags.map((tag) => ({ value: tag.id, label: tag.name }))
+		:	([] as ACOption<string>[])
+	);
 	const [validation, setValidation] = useState<{
 		message: string;
 		data: Partial<
@@ -26,15 +34,24 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 	const [error, setError] = useState<string>();
 	const toast = useToast();
 
-	const handleCreatePost = async (e: React.FormEvent) => {
+	const handleUpsert = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setValidation(undefined);
 		setError(undefined);
-		const res = await createPost({
-			title,
-			body: JSON.stringify(body),
-			tags: tags.map((tag) => tag.value),
-		});
+		let res;
+		if (!!data) {
+			res = await updatePost(data.id, {
+				title,
+				body: JSON.stringify(body),
+				tags: tags.map((tag) => tag.value),
+			});
+		} else {
+			res = await createPost({
+				title,
+				body: JSON.stringify(body),
+				tags: tags.map((tag) => tag.value),
+			});
+		}
 		if (res?.validation) setValidation(res?.validation);
 		if (res?.error) setError(res?.error);
 	};
@@ -45,7 +62,7 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 
 	return (
 		<form
-			onSubmit={handleCreatePost}
+			onSubmit={handleUpsert}
 			className="mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
 		>
 			<h1 className="text-3xl font-bold">Create a new post</h1>
@@ -59,6 +76,7 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 			/>
 			<Editor
 				label="Body"
+				initialValue={data ? body : undefined}
 				onChange={(newValue) => setBody(newValue)}
 				error={validation?.data.body}
 			/>
@@ -70,7 +88,7 @@ export default function CreatePostForm({ options }: CreatePostFormProps) {
 				error={validation?.data.tags}
 			/>
 			<button type="submit" className="btn btn-primary">
-				Publish
+				{!!data ? 'Update' : 'Publish'}
 			</button>
 		</form>
 	);

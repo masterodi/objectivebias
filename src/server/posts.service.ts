@@ -1,6 +1,6 @@
 import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
-import { CreatePostPayloadSchema, safeValidate } from '@/schemas';
+import { CreatePostPayloadSchema, validate } from '@/schemas';
 import { CreatePostPayload, Post } from '@/types';
 import { RecordFullListOptions } from 'pocketbase';
 
@@ -11,7 +11,6 @@ async function getList(options?: any) {
 	};
 
 	const data = await pb.collection('posts').getFullList(queryOptions);
-
 	return data;
 }
 
@@ -22,7 +21,6 @@ async function getOne(id: string, options?: any) {
 	};
 
 	const data = await pb.collection<Post>('posts').getOne(id, queryOptions);
-
 	return data;
 }
 
@@ -45,13 +43,7 @@ async function getFiltered(filters: any, options?: any) {
 
 async function create(payload: CreatePostPayload) {
 	try {
-		const [data, validationError] = await safeValidate(
-			payload,
-			CreatePostPayloadSchema
-		);
-
-		if (validationError) throw validationError;
-
+		const data = await validate(payload, CreatePostPayloadSchema);
 		const res = await pb.collection('posts').create(data);
 		return { data: res };
 	} catch (error) {
@@ -59,11 +51,17 @@ async function create(payload: CreatePostPayload) {
 	}
 }
 
+async function remove(id: string) {
+	const res = await pb.collection('posts').delete(id);
+	return res;
+}
+
 const PostsService = {
 	getList,
 	getOne,
 	getFiltered,
 	create,
+	delete: remove,
 };
 
 export default PostsService;

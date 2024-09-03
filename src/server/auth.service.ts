@@ -17,11 +17,9 @@ const AuthCookieOptions: Partial<ResponseCookie> = {
 async function login(payload: LoginPayload) {
 	try {
 		const data = await validate(payload, LoginPayloadSchema);
-
 		const { token, record: model } = await pb
 			.collection('users')
 			.authWithPassword(data.username, data.password);
-
 		const cookie = JSON.stringify({ token, model });
 		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
 	} catch (error) {
@@ -32,13 +30,10 @@ async function login(payload: LoginPayload) {
 async function register(payload: RegisterPayload) {
 	try {
 		const data = await validate(payload, RegisterPayloadSchema);
-
 		const record = await pb.collection('users').create(data);
-
 		const { token, record: model } = await pb
 			.collection('users')
 			.authWithPassword(data.username, data.password);
-
 		const cookie = JSON.stringify({ token, model });
 		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
 	} catch (error) {

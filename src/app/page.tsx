@@ -1,11 +1,11 @@
-import { PostSchema } from '@/schemas';
+import RichTextDisplay from '@/components/rich-text/rich-text-display';
+import { Post } from '@/types';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
-import { InferType } from 'yup';
 import { getPosts } from './queries/posts.queries';
 
 type PostCardProps = {
-	post: InferType<typeof PostSchema>;
+	post: Post;
 	className?: string;
 };
 
@@ -20,9 +20,7 @@ function PostCard(props: PostCardProps) {
 		>
 			<div className="card-body max-h-full">
 				<h2 className="card-title">{props.post.title}</h2>
-				<div className="line-clamp-6 max-h-full">
-					<p>{props.post.body}</p>
-				</div>
+				<RichTextDisplay richText={props.post.body} />
 				<div className="card-actions mt-auto justify-end">
 					<button className="btn btn-link btn-primary">
 						Read More
@@ -36,7 +34,7 @@ function PostCard(props: PostCardProps) {
 export default async function Home() {
 	const posts = await getPosts();
 	const [first, second, third, fourth, ...rest] = posts;
-	const aside = [second, third, fourth];
+	const aside = [second, third, fourth].filter((x) => !!x);
 
 	return (
 		<main className="mx-auto my-4 min-h-screen max-w-5xl">

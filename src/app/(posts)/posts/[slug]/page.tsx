@@ -1,4 +1,5 @@
 import { getPostBySlug } from '@/app/queries/posts.queries';
+import RichTextDisplay from '@/components/rich-text/rich-text-display';
 
 type PostProps = {
 	params: { slug: string };
@@ -27,7 +28,9 @@ export default async function Post(props: PostProps) {
 				<h6></h6>
 			</header>
 
-			<article className="prose max-w-none">{post.body}</article>
+			<article className="prose max-w-none">
+				<RichTextDisplay richText={post.body} />
+			</article>
 
 			<div className="divider" />
 

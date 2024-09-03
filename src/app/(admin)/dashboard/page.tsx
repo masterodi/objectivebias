@@ -8,7 +8,7 @@ async function PostsTable() {
 	const columns = ['id', 'title', 'slug', 'tags', 'created', 'updated'];
 
 	return (
-		<table className="table mx-auto max-w-5xl">
+		<table className="table">
 			<thead>
 				<tr>
 					{columns.map((key) => (
@@ -67,7 +67,7 @@ async function PostsTable() {
 
 export default function DashboardHome() {
 	return (
-		<div className="p-4">
+		<div className="mx-auto min-h-screen max-w-6xl overflow-auto p-4">
 			<PostsTable />
 		</div>
 	);

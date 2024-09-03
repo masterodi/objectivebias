@@ -5,5 +5,9 @@ type ErrorDisplayProps = {
 export default function ErrorDisplay(props: ErrorDisplayProps) {
 	if (!props.error) return null;
 
-	return [...props.error].map((e) => <div className="text-error">{e}</div>);
+	return [...props.error].map((e, i) => (
+		<div key={i} className="text-error">
+			{e}
+		</div>
+	));
 }

@@ -1,43 +1,81 @@
 import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { CreatePostPayloadSchema, validate } from '@/schemas';
-import { CreatePostPayload, Post } from '@/types';
+import {
+	CreatePostPayload,
+	Post,
+	PostWithTags,
+	PostWithTagsUser,
+	PostWithUser,
+} from '@/types';
 import { RecordFullListOptions } from 'pocketbase';
 
-async function getList(options?: any) {
+type ExpandOptions = { tags?: boolean; created_by?: boolean };
+
+type QueryOptions<E extends ExpandOptions | undefined> = {
+	expand?: E;
+};
+
+type QueryResult<E extends ExpandOptions | undefined = undefined> =
+	E extends { tags: true; created_by: true } ? PostWithTagsUser
+	: E extends { tags: true } ? PostWithTags
+	: E extends { created_by: true } ? PostWithUser
+	: Post;
+
+async function getList<E extends ExpandOptions | undefined>(
+	options?: QueryOptions<E>
+) {
 	const queryOptions: RecordFullListOptions = {
 		sort: '-created',
-		expand: options?.with?.join(','),
+		expand:
+			options?.expand ? Object.keys(options.expand).join(',') : undefined,
 	};
 
-	const data = await pb.collection('posts').getFullList(queryOptions);
+	const data = await pb
+		.collection<QueryResult<E>>('posts')
+		.getFullList(queryOptions);
+
 	return data;
 }
 
-async function getOne(id: string, options?: any) {
+const x = await getList({ expand: { tags: true } });
+const y = await getList({ expand: { tags: true, created_by: true } });
+
+async function getOne<E extends ExpandOptions | undefined>(
+	id: string,
+	options?: QueryOptions<E>
+) {
 	const queryOptions: RecordFullListOptions = {
 		sort: '-created',
-		expand: options?.with?.join(','),
+		expand:
+			options?.expand ? Object.keys(options.expand).join(',') : undefined,
 	};
 
-	const data = await pb.collection<Post>('posts').getOne(id, queryOptions);
+	const data = await pb
+		.collection<QueryResult<E>>('posts')
+		.getOne(id, queryOptions);
+
 	return data;
 }
 
-async function getFiltered(filters: any, options?: any) {
+async function getFiltered<E extends ExpandOptions | undefined>(
+	filters: any,
+	options?: QueryOptions<E>
+) {
 	const queryOptions: RecordFullListOptions = {
 		sort: '-created',
-		expand: options?.with?.join(','),
+		expand:
+			options?.expand ? Object.keys(options.expand).join(',') : undefined,
 	};
 
 	if (filters?.slug) {
 		const data = await pb
-			.collection('posts')
+			.collection<QueryResult<E>>('posts')
 			.getFirstListItem(`slug="${filters.slug}"`, queryOptions);
 		return data;
 	}
 
-	const data = await pb.collection<Post>('posts').getFullList();
+	const data = await pb.collection<QueryResult<E>>('posts').getFullList();
 	return data;
 }
 

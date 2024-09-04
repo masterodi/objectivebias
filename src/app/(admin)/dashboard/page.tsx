@@ -1,11 +1,21 @@
 import { deletePost } from '@/app/actions/posts.actions';
 import { getPosts } from '@/app/queries/posts.queries';
+import { Post } from '@/types';
 import { Edit, Trash, View } from 'lucide-react';
 import Link from 'next/link';
 
+export const revalidate = 0;
+
 async function PostsTable() {
 	const posts = await getPosts();
-	const columns = ['id', 'title', 'slug', 'tags', 'created', 'updated'];
+	const columns = [
+		'id',
+		'title',
+		'slug',
+		'tags',
+		'created',
+		'updated',
+	] as (keyof Post)[];
 
 	return (
 		<table className="table">

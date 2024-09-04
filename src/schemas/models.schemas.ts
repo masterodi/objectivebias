@@ -5,6 +5,7 @@ export const UserSchema = object({
 	username: string().required(),
 	email: string().required(),
 	avatar: string().required(),
+	role: string().default('user'),
 	created: string().datetime().required(),
 	updated: string().datetime().required(),
 });

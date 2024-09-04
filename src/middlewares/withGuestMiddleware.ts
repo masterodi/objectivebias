@@ -1,19 +1,19 @@
 import AuthService from '@/server/auth.service';
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import {
+	NextFetchEvent,
+	NextMiddleware,
+	NextRequest,
+	NextResponse,
+} from 'next/server';
 import { isTokenExpired } from 'pocketbase';
-import { CustomMiddleware } from './chain';
 
 const GUEST_ROUTES = ['/login', '/register'];
 
 const isGuestRoute = (route: string) =>
 	GUEST_ROUTES.some((r) => route.startsWith(r));
 
-export function withGuestMiddleware(middleware: CustomMiddleware) {
-	return async (
-		request: NextRequest,
-		event: NextFetchEvent,
-		response: NextResponse
-	) => {
+export default function withGuestMiddleware(middleware: NextMiddleware) {
+	return async (request: NextRequest, event: NextFetchEvent) => {
 		if (isGuestRoute(request.nextUrl.pathname)) {
 			const token = AuthService.token();
 
@@ -24,6 +24,6 @@ export function withGuestMiddleware(middleware: CustomMiddleware) {
 			}
 		}
 
-		return middleware(request, event, response);
+		return middleware(request, event);
 	};
 }

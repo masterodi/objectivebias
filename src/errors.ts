@@ -17,6 +17,10 @@ const ERRORS_DATA = {
 			'Failed to authenticate. Please check your credentials and try again.',
 		code: 'error:auth',
 	},
+	UNAUTHORIZED: {
+		message: 'Unauthorized operation.',
+		code: 'error:auth:unauthorized',
+	},
 	INVALID_EMAIL: {
 		message: 'The email is invalid or already in use.',
 		code: 'error:auth:invalid_email',
@@ -68,6 +72,16 @@ export class ValidationError<T extends object> extends RequestError {
 
 	static is<R extends object>(error: unknown): error is ValidationError<R> {
 		return error instanceof ValidationError;
+	}
+}
+
+export class UnauthorizedError extends RequestError {
+	constructor() {
+		super(ERRORS_DATA.UNAUTHORIZED);
+	}
+
+	static is(error: unknown): error is UnauthorizedError {
+		return error instanceof UnauthorizedError;
 	}
 }
 

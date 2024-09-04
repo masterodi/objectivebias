@@ -36,15 +36,15 @@ async function UserNavbar({ session }: { session: Session }) {
 					brq
 				</Link>
 			</div>
-			<div className="navbar-end">
-				<span>{session.username}</span>
+			<div className="navbar-end gap-4">
+				<span>{session.user.username}</span>
 				<form action={logout}>
 					<button type="submit" className="btn btn-ghost">
 						Log Out
 					</button>
 				</form>
 
-				<AdminDrawer />
+				{session.isModerator && <AdminDrawer />}
 			</div>
 		</nav>
 	);

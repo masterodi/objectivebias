@@ -8,6 +8,6 @@ export async function getAuthToken() {
 }
 
 export async function getSession() {
-	const model = AuthService.session();
-	return model;
+	const session = await AuthService.session();
+	return session;
 }

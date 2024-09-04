@@ -1,11 +1,16 @@
 import { PocketbaseError } from '@/errors';
 import pb from '@/pocketbase';
 import { LoginPayloadSchema, RegisterPayloadSchema, validate } from '@/schemas';
-import { LoginPayload, RegisterPayload, Session } from '@/types';
+import { LoginPayload, RegisterPayload, Session, User } from '@/types';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
-const AUTH_COOKIE = 'pb_auth';
+type Auth = {
+	token: string;
+	user: User;
+};
+
+const AuthCookie = 'pb_auth';
 
 const AuthCookieOptions: Partial<ResponseCookie> = {
 	secure: true,
@@ -14,14 +19,22 @@ const AuthCookieOptions: Partial<ResponseCookie> = {
 	httpOnly: true,
 };
 
+function setAuthCookie(data: Auth | null) {
+	if (data) {
+		const cookie = JSON.stringify(data);
+		cookies().set(AuthCookie, cookie, AuthCookieOptions);
+	} else {
+		cookies().delete(AuthCookie);
+	}
+}
+
 async function login(payload: LoginPayload) {
 	try {
 		const data = await validate(payload, LoginPayloadSchema);
-		const { token, record: model } = await pb
-			.collection('users')
+		const { token, record } = await pb
+			.collection<User>('users')
 			.authWithPassword(data.username, data.password);
-		const cookie = JSON.stringify({ token, model });
-		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
+		setAuthCookie({ token, user: record });
 	} catch (error) {
 		throw PocketbaseError.auth(error);
 	}
@@ -30,31 +43,37 @@ async function login(payload: LoginPayload) {
 async function register(payload: RegisterPayload) {
 	try {
 		const data = await validate(payload, RegisterPayloadSchema);
-		const record = await pb.collection('users').create(data);
-		const { token, record: model } = await pb
-			.collection('users')
+		await pb.collection('users').create(data);
+		const { token, record } = await pb
+			.collection<User>('users')
 			.authWithPassword(data.username, data.password);
-		const cookie = JSON.stringify({ token, model });
-		cookies().set(AUTH_COOKIE, cookie, AuthCookieOptions);
+		setAuthCookie({ token, user: record });
 	} catch (error) {
 		throw PocketbaseError.auth(error);
 	}
 }
 
 function logout() {
-	cookies().delete(AUTH_COOKIE);
+	setAuthCookie(null);
 }
 
-function session() {
-	const authCookie = cookies().get(AUTH_COOKIE);
-	const model = authCookie?.value ? JSON.parse(authCookie.value).model : null;
-	return model as Session;
+function getAuth() {
+	const authCookie = cookies().get(AuthCookie);
+	return authCookie?.value ?
+			(JSON.parse(authCookie.value) as Auth)
+		:	undefined;
+}
+
+async function session(): Promise<Session | undefined> {
+	const auth = getAuth();
+	if (!auth) return undefined;
+	const user = await pb.collection<User>('users').getOne(auth.user.id);
+	return { user, isModerator: user.role === 'moderator' };
 }
 
 function token() {
-	const authCookie = cookies().get(AUTH_COOKIE);
-	const token = authCookie?.value ? JSON.parse(authCookie.value).token : null;
-	return token as string;
+	const auth = getAuth();
+	return auth?.token;
 }
 
 const AuthService = {

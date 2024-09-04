@@ -1,3 +1,3 @@
 export { chain } from './chain';
-export { withAuthMiddleware } from './withAuthMiddleware';
-export { withGuestMiddleware } from './withGuestMiddleware';
+export { default as withAuthMiddleware } from './withAuthMiddleware';
+export { default as withGuestMiddleware } from './withGuestMiddleware';

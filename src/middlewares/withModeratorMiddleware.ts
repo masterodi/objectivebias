@@ -7,19 +7,25 @@ import {
 } from 'next/server';
 import { isTokenExpired } from 'pocketbase';
 
-const PRIVATE_ROUTES = [] as string[];
+const PRIVATE_ROUTES = ['/dashboard'];
 
-const isPrivateRoute = (route: string) =>
+const isModeratorRoute = (route: string) =>
 	PRIVATE_ROUTES.some((r) => route.startsWith(r));
 
-export default function withAuthMiddleware(middleware: NextMiddleware) {
+export function withModeratorMiddleware(middleware: NextMiddleware) {
 	return async (request: NextRequest, event: NextFetchEvent) => {
-		if (isPrivateRoute(request.nextUrl.pathname)) {
+		if (isModeratorRoute(request.nextUrl.pathname)) {
 			const token = AuthService.token();
+			const session = await AuthService.session();
 
-			if (!token || isTokenExpired(token)) {
+			if (
+				!session ||
+				!session.isModerator ||
+				!token ||
+				isTokenExpired(token)
+			) {
 				const url = request.nextUrl.clone();
-				url.pathname = '/login';
+				url.pathname = '/';
 				return NextResponse.redirect(url);
 			}
 		}

@@ -7,7 +7,10 @@ export async function getPosts(options?: any) {
 	return data;
 }
 
-export async function getPostBySlug(slug: string, options?: any) {
-	const data = await PostsService.getFiltered({ slug: slug }, options);
+export async function getPostBySlug(slug: string) {
+	const data = await PostsService.getFiltered(
+		{ slug },
+		{ expand: { tags: true, created_by: true } }
+	);
 	return data;
 }

@@ -16,7 +16,7 @@ export default function RichTextDisplay({
 			}
 			readOnly
 		>
-			<PlateContent />
+			<PlateContent className="overflow-hidden text-ellipsis whitespace-nowrap break-words" />
 		</Plate>
 	);
 }

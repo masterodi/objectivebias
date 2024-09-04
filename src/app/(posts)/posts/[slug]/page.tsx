@@ -6,9 +6,7 @@ type PostProps = {
 };
 
 export default async function Post(props: PostProps) {
-	const post = await getPostBySlug(props.params.slug, {
-		with: ['tags', 'created_by'],
-	});
+	const post = await getPostBySlug(props.params.slug);
 
 	return (
 		<main className="mx-auto my-12 min-h-screen w-full max-w-5xl p-4">

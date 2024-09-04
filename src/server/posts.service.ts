@@ -10,9 +10,9 @@ import {
 } from '@/types';
 import { RecordFullListOptions } from 'pocketbase';
 
-type ExpandOptions = { tags?: boolean; created_by?: boolean };
+export type ExpandOptions = { tags?: true; created_by?: true };
 
-type QueryOptions<E extends ExpandOptions | undefined> = {
+export type QueryOptions<E extends ExpandOptions | undefined> = {
 	expand?: E;
 };
 
@@ -58,26 +58,27 @@ async function getOne<E extends ExpandOptions | undefined>(
 	return data;
 }
 
-async function getFiltered<E extends ExpandOptions | undefined>(
-	filters: any,
-	options?: QueryOptions<E>
-) {
+type QueryFilters<S extends string> = {
+	slug: S;
+};
+
+async function getFiltered<
+	S extends string,
+	E extends ExpandOptions | undefined,
+>(filters: QueryFilters<S>, options?: QueryOptions<E>) {
 	const queryOptions: RecordFullListOptions = {
 		sort: '-created',
 		expand:
 			options?.expand ? Object.keys(options.expand).join(',') : undefined,
 	};
 
-	if (filters?.slug) {
-		const data = await pb
-			.collection<QueryResult<E>>('posts')
-			.getFirstListItem(`slug="${filters.slug}"`, queryOptions);
-		return data;
-	}
-
-	const data = await pb.collection<QueryResult<E>>('posts').getFullList();
+	const data = await pb
+		.collection<QueryResult<E>>('posts')
+		.getFirstListItem(`slug="${filters.slug}"`, queryOptions);
 	return data;
 }
+
+const res = await getFiltered({ slug: 'test' }, { expand: { tags: true } });
 
 async function create(payload: CreatePostPayload) {
 	try {

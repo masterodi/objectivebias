@@ -6,8 +6,7 @@ import Link from 'next/link';
 
 export const revalidate = 0;
 
-async function PostsTable() {
-	const posts = await getPosts();
+async function PostsTable({ posts }: { posts: Post[] }) {
 	const columns = [
 		'id',
 		'title',
@@ -75,10 +74,17 @@ async function PostsTable() {
 	);
 }
 
-export default function DashboardHome() {
+export default async function DashboardHome() {
+	const posts = await getPosts();
+
 	return (
 		<div className="mx-auto min-h-screen max-w-6xl overflow-auto p-4">
-			<PostsTable />
+			{!!posts.length && <PostsTable posts={posts} />}
+			{!posts.length && (
+				<div className="grid min-h-screen place-items-center text-5xl">
+					No post created so far. Create one and check again.
+				</div>
+			)}
 		</div>
 	);
 }

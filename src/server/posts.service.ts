@@ -78,8 +78,6 @@ async function getFiltered<
 	return data;
 }
 
-const res = await getFiltered({ slug: 'test' }, { expand: { tags: true } });
-
 async function create(payload: CreatePostPayload) {
 	try {
 		const data = await validate(payload, CreatePostPayloadSchema);

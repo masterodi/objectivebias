@@ -4,9 +4,7 @@ import pb from '@/pocketbase';
 import { PostWithTags } from '@/types';
 
 export default async function EditPost({ params }: any) {
-	const post = await getPostBySlug(params.slug, {
-		with: ['tags'],
-	});
+	const post = await getPostBySlug(params.slug);
 	const tags = (await pb.collection('tags').getFullList()).map((tag) => ({
 		value: tag.id,
 		label: tag.name,

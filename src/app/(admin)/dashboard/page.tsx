@@ -76,11 +76,12 @@ async function PostsTable({ posts }: { posts: Post[] }) {
 
 export default async function DashboardHome() {
 	const posts = await getPosts();
+	const hasPosts = !!posts.length;
 
 	return (
 		<div className="mx-auto min-h-screen max-w-6xl overflow-auto p-4">
-			{!!posts.length && <PostsTable posts={posts} />}
-			{!posts.length && (
+			{hasPosts && <PostsTable posts={posts} />}
+			{!hasPosts && (
 				<div className="grid min-h-screen place-items-center text-5xl">
 					No post created so far. Create one and check again.
 				</div>

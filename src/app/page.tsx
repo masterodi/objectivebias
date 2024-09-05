@@ -37,10 +37,11 @@ export default async function Home() {
 	const posts = await getPosts();
 	const [first, second, third, fourth, ...rest] = posts;
 	const aside = [second, third, fourth].filter((x) => !!x);
+	const hasPosts = !!posts.length;
 
 	return (
 		<main className="mx-auto my-4 min-h-screen max-w-5xl">
-			{!!posts.length && (
+			{hasPosts && (
 				<div>
 					<div className="grid gap-4 lg:grid-cols-7 lg:grid-rows-[repeat(3,minmax(0,200px))]">
 						{first && (
@@ -65,7 +66,7 @@ export default async function Home() {
 				</div>
 			)}
 
-			{!posts.length && (
+			{!hasPosts && (
 				<div className="grid min-h-screen place-items-center text-5xl">
 					No post available yet. Come back later.
 				</div>

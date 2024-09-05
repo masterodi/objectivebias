@@ -38,9 +38,6 @@ async function getList<E extends ExpandOptions | undefined>(
 	return data;
 }
 
-const x = await getList({ expand: { tags: true } });
-const y = await getList({ expand: { tags: true, created_by: true } });
-
 async function getOne<E extends ExpandOptions | undefined>(
 	id: string,
 	options?: QueryOptions<E>

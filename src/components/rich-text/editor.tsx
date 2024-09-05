@@ -48,7 +48,7 @@ export default function Editor({
 					placeholder="Type..."
 					className={twMerge(
 						!readOnly &&
-							`textarea prose textarea-bordered ${error && 'textarea-error'} mt-2`
+							`textarea prose textarea-bordered textarea-lg ${error && 'textarea-error'} mt-2`
 					)}
 				/>
 				<ErrorDisplay error={error} />

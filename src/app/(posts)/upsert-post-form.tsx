@@ -63,7 +63,7 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 	return (
 		<form
 			onSubmit={handleUpsert}
-			className="mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
+			className="m-4 mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
 		>
 			<h1 className="text-3xl font-bold">Create a new post</h1>
 			<Input

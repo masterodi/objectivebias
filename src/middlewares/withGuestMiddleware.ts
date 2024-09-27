@@ -6,11 +6,7 @@ import {
 	NextResponse,
 } from 'next/server';
 import { isTokenExpired } from 'pocketbase';
-
-const GUEST_ROUTES = ['/login', '/register'];
-
-const isGuestRoute = (route: string) =>
-	GUEST_ROUTES.some((r) => route.startsWith(r));
+import { isGuestRoute } from './routes';
 
 export default function withGuestMiddleware(middleware: NextMiddleware) {
 	return async (request: NextRequest, event: NextFetchEvent) => {

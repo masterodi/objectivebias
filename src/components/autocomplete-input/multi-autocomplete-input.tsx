@@ -82,7 +82,6 @@ export default function MultiAutocompleteInput({
 										)
 									)
 								}
-								className="border border-cyan-500"
 							>
 								<X size={16} />
 							</button>

@@ -1,8 +1,8 @@
 import RichTextDisplay from '@/components/rich-text/rich-text-display';
-import { Post } from '@/types';
+import { Post } from '@/schemas';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
-import getPosts from './(posts)/(queries)/getPosts.query';
+import getPosts from './_queries/getPosts.query';
 
 export const revalidate = 0;
 
@@ -11,18 +11,18 @@ type PostCardProps = {
 	className?: string;
 };
 
-function PostCard(props: PostCardProps) {
+function PostCard({ post, className }: PostCardProps) {
 	return (
 		<Link
-			href={`/posts/${props.post.slug}`}
+			href={`/posts/${post.slug}`}
 			className={twMerge(
 				'card max-h-full bg-base-300 shadow-xl',
-				props.className
+				className
 			)}
 		>
 			<div className="card-body max-h-full">
-				<h2 className="card-title">{props.post.title}</h2>
-				<RichTextDisplay richText={props.post.body} />
+				<h2 className="card-title">{post.title}</h2>
+				<RichTextDisplay richText={post.body} />
 				<div className="card-actions mt-auto justify-end">
 					<button className="btn btn-link btn-primary">
 						Read More

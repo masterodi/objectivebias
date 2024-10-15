@@ -7,8 +7,16 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export default function Input(props: InputProps) {
-	const { type, name, id, defaultValue, label, error, className, ...rest } =
-		props;
+	const {
+		type = 'text',
+		name,
+		id,
+		defaultValue,
+		label,
+		error,
+		className,
+		...rest
+	} = props;
 
 	return (
 		<div className="grid w-full">

@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import ErrorDisplay from '../error-display';
 import { ACOption } from './types';
 
@@ -16,6 +16,7 @@ type MultiAutocompleteInputProps = Omit<
 	onChange?: (newValue: ACOption<string>[]) => void;
 	defaultValue?: ACOption<string>[];
 	options?: ACOption<string>[];
+	emptyComponent?: ReactNode;
 };
 
 export default function MultiAutocompleteInput({
@@ -31,6 +32,7 @@ export default function MultiAutocompleteInput({
 	onChange,
 	defaultValue,
 	options = [] as ACOption<string>[],
+	emptyComponent = undefined,
 }: MultiAutocompleteInputProps) {
 	const isControlled = typeof value !== 'undefined';
 	const isInputControlled = typeof inputValue !== 'undefined';
@@ -114,6 +116,9 @@ export default function MultiAutocompleteInput({
 								</button>
 							</li>
 						))}
+						{filteredOptions.length === 0 && (
+							<li>{emptyComponent}</li>
+						)}
 					</ul>
 				</div>
 			</div>

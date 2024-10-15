@@ -7,3 +7,7 @@ export function createSlug(value: string) {
 		.replace(/-+/g, '-') // convert consecutive dashes to singuar one
 		.replace(/-+$/g, ''); // remove one or more dash at the end of the string
 }
+
+export const DialogSearchParams = {
+	upsertTag: 'upsert-tag',
+};

@@ -1,6 +1,8 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
 import RichTextDisplay from '@/components/rich-text/rich-text-display';
 
+export const revalidate = 0;
+
 type PostProps = {
 	params: { slug: string };
 };

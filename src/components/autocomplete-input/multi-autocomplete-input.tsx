@@ -16,7 +16,7 @@ type MultiAutocompleteInputProps = Omit<
 	onChange?: (newValue: ACOption<string>[]) => void;
 	defaultValue?: ACOption<string>[];
 	options?: ACOption<string>[];
-	emptyComponent?: ReactNode;
+	whenEmpty?: ReactNode;
 };
 
 export default function MultiAutocompleteInput({
@@ -32,7 +32,7 @@ export default function MultiAutocompleteInput({
 	onChange,
 	defaultValue,
 	options = [] as ACOption<string>[],
-	emptyComponent = undefined,
+	whenEmpty = undefined,
 }: MultiAutocompleteInputProps) {
 	const isControlled = typeof value !== 'undefined';
 	const isInputControlled = typeof inputValue !== 'undefined';
@@ -117,7 +117,7 @@ export default function MultiAutocompleteInput({
 							</li>
 						))}
 						{filteredOptions.length === 0 && (
-							<li>{emptyComponent}</li>
+							<li className="text-lg">{whenEmpty}</li>
 						)}
 					</ul>
 				</div>

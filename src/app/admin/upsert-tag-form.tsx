@@ -30,16 +30,13 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 		closeUpsertTagDialog();
 	};
 
-	const handleUpsertTag = async (e: FormEvent) => {
-		e.preventDefault();
+	const handleUpsertTag = async () => {
+		setFieldsError(null);
 		startTransition(async () => {
-			setFieldsError(null);
-
 			const { validationError, error, success } = await upsertTag({
 				id: data?.id,
 				payload: fields,
 			});
-
 			if (validationError) {
 				setFieldsError(validationError.details);
 			} else if (error) {
@@ -59,7 +56,7 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 		>
 			<div className="modal-box">
 				<form
-					onSubmit={handleUpsertTag}
+					action={handleUpsertTag}
 					className="grid w-full max-w-xl gap-8"
 				>
 					<h1 className="text-3xl font-bold">

@@ -19,10 +19,9 @@ export default function LoginForm() {
 		setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const handleLogin = async () =>
+	const handleLogin = async () => {
+		setFieldsError(null);
 		startTransition(async () => {
-			setFieldsError(null);
-
 			const { validationError, error } = await login(fields);
 			if (validationError) {
 				setFieldsError(validationError.details);
@@ -30,6 +29,7 @@ export default function LoginForm() {
 				toast.error(error);
 			}
 		});
+	};
 
 	return (
 		<div className="grid min-h-screen place-items-center p-4">

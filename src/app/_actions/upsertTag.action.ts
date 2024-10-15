@@ -1,43 +1,25 @@
 'use server';
 
 import db, { tags } from '@/db';
-import { DataInvalidFormatError } from '@/error';
-import { CreateTagPayload, CreateTagPayloadSchema, validate } from '@/schemas';
+import {
+	CreateTagPayload,
+	CreateTagPayloadSchema,
+	InsertTag,
+	validate,
+} from '@/schemas';
 import { revalidatePath } from 'next/cache';
 import getTagByName from '../_queries/getTagByName.query';
 import validateRequest from '../_queries/validateRequest.query';
 
 type UpsertTagProps = { id?: string; payload: CreateTagPayload };
-type UpsertTagResult =
-	| {
-			validationError?: ReturnType<
-				DataInvalidFormatError<CreateTagPayload>['toJson']
-			>;
-			error?: undefined;
-			success?: undefined;
-			tagId?: undefined;
-	  }
-	| {
-			validationError?: undefined;
-			error: string;
-			success?: undefined;
-			tagId?: undefined;
-	  }
-	| {
-			validationError?: undefined;
-			error?: undefined;
-			success: true;
-			tagId: string;
-	  };
 
-export default async function upsertTag({
-	id,
-	payload,
-}: UpsertTagProps): Promise<UpsertTagResult> {
+export default async function upsertTag(props: UpsertTagProps) {
 	const { session, user } = await validateRequest();
-	if (!session) {
+	if (!session || user.role !== 'moderator') {
 		return { error: 'Unauthorized' };
 	}
+
+	const { id, payload } = props;
 
 	const { data, error } = await validate(payload, CreateTagPayloadSchema);
 	if (error) {
@@ -54,13 +36,13 @@ export default async function upsertTag({
 		}
 	}
 
-	const upsertData = { name, createdBy: user.id };
-	const upsertResult = await db
+	const upsertTagData = { name, createdBy: user.id } satisfies InsertTag;
+	const upsertTagResult = await db
 		.insert(tags)
-		.values({ id, ...upsertData })
-		.onConflictDoUpdate({ target: tags.id, set: upsertData })
-		.returning({ upsertId: tags.id });
+		.values({ id, ...upsertTagData })
+		.onConflictDoUpdate({ target: tags.id, set: upsertTagData })
+		.returning();
 
 	revalidatePath('/admin/dashboard?view=tags');
-	return { success: true, tagId: upsertResult[0].upsertId };
+	return { success: true, data: upsertTagResult[0] };
 }

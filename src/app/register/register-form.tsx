@@ -21,10 +21,9 @@ export default function RegisterForm() {
 		setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const handleRegister = async () =>
+	const handleRegister = async () => {
+		setFieldsError(null);
 		startTransition(async () => {
-			setFieldsError(null);
-
 			const { validationError, error } = await register(fields);
 			if (validationError) {
 				setFieldsError(validationError.details);
@@ -32,6 +31,7 @@ export default function RegisterForm() {
 				toast.error(error);
 			}
 		});
+	};
 
 	return (
 		<div className="grid min-h-screen place-items-center p-4">

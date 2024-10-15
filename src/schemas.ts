@@ -1,4 +1,6 @@
+import { InferInsertModel } from 'drizzle-orm';
 import { array, InferType, object, Schema, string, ValidationError } from 'yup';
+import { posts, tags, users } from './db';
 import { DataInvalidFormatError } from './error';
 
 export const UserSchema = object({
@@ -100,3 +102,6 @@ export type CreateTagPayload = InferType<typeof CreateTagPayloadSchema>;
 export type UpdateTagPayload = InferType<typeof UpdateTagPayloadSchema>;
 export type CreatePostPayload = InferType<typeof CreatePostPayloadSchema>;
 export type UpdatePostPayload = InferType<typeof UpdatePostPayloadSchema>;
+export type InsertUser = InferInsertModel<typeof users>;
+export type InsertTag = InferInsertModel<typeof tags>;
+export type InsertPost = InferInsertModel<typeof posts>;

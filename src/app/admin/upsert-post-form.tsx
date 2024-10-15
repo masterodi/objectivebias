@@ -7,7 +7,7 @@ import Editor from '@/components/rich-text/editor';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import { Value } from '@udecode/plate';
-import React, { useState, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import upsertPost from '../_actions/upsertPost.action';
 import upsertTag from '../_actions/upsertTag.action';
 
@@ -27,26 +27,23 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
 		title: data?.title ?? '',
 		body: data?.body ?? ([] as Value),
+		tagInput: '',
 		tags: data?.tags ?? ([] as ACOption<string>[]),
 	});
-	const [tagInputValue, setTagInputValue] = useState('');
 	const toast = useToast();
 
-	const handleUpsert = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleUpsert = async () => {
+		setFieldsError(null);
+		const payload = {
+			title: fields.title,
+			body: JSON.stringify(fields.body),
+			tags: fields.tags.map((tag) => tag.value),
+		};
 		startTransition(async () => {
-			setFieldsError(null);
-
-			const upsertData = {
-				title: fields.title,
-				body: JSON.stringify(fields.body),
-				tags: fields.tags.map((tag) => tag.value),
-			};
 			const { validationError, error } = await upsertPost({
 				id: data?.id,
-				payload: upsertData,
+				payload,
 			});
-
 			if (validationError) {
 				setFieldsError(validationError.details);
 			} else if (error) {
@@ -56,30 +53,25 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 	};
 
 	const handleCreateAndAddTag = async (e: React.MouseEvent) => {
+		const payload = { name: fields.tagInput };
 		startTransition(async () => {
-			const { validationError, error, success, tagId } = await upsertTag({
-				payload: { name: tagInputValue },
-			});
-
+			const { error, success, data } = await upsertTag({ payload });
 			if (error) {
 				toast.error(error);
 			} else if (success) {
 				toast.success('Tag created and added');
 				setFields((prev) => ({
 					...prev,
-					tags: [
-						...prev.tags,
-						{ label: tagInputValue, value: tagId },
-					],
+					tagInput: '',
+					tags: [...prev.tags, { label: data.name, value: data.id }],
 				}));
-				setTagInputValue('');
 			}
 		});
 	};
 
 	return (
 		<form
-			onSubmit={handleUpsert}
+			action={handleUpsert}
 			className="m-4 mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
 		>
 			<h1 className="text-3xl font-bold">
@@ -106,15 +98,20 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 			<MultiAutocompleteInput
 				label="Tags"
 				options={options}
-				inputValue={tagInputValue}
-				onInputChange={(e) => setTagInputValue(e.target.value)}
+				inputValue={fields.tagInput}
+				onInputChange={(e) =>
+					setFields((prev) => ({ ...prev, tagInput: e.target.value }))
+				}
 				value={fields.tags}
 				onChange={(newValue) => {
-					setFields((prev) => ({ ...prev, tags: newValue }));
-					setTagInputValue('');
+					setFields((prev) => ({
+						...prev,
+						tagInput: '',
+						tags: newValue,
+					}));
 				}}
 				error={fieldsError?.tags}
-				emptyComponent={
+				whenEmpty={
 					<button type="button" onClick={handleCreateAndAddTag}>
 						+ Create and add tag
 					</button>

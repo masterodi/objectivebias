@@ -1,4 +1,5 @@
-import AuthService from '@/server/auth.service';
+import getSession from '@/app/(authentication)/(queries)/getSession.query';
+import getToken from '@/app/(authentication)/(queries)/getToken.query';
 import {
 	NextFetchEvent,
 	NextMiddleware,
@@ -11,8 +12,8 @@ import { isModeratorRoute } from './routes';
 export function withModeratorMiddleware(middleware: NextMiddleware) {
 	return async (request: NextRequest, event: NextFetchEvent) => {
 		if (isModeratorRoute(request.nextUrl.pathname)) {
-			const token = AuthService.token();
-			const session = await AuthService.session();
+			const token = await getToken();
+			const session = await getSession();
 
 			if (
 				!session ||

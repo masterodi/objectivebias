@@ -1,5 +1,5 @@
+import getPostBySlug from '@/app/(posts)/(queries)/getPostBySlug.query';
 import UpsertPostForm from '@/app/(posts)/upsert-post-form';
-import { getPostBySlug } from '@/app/queries/posts.queries';
 import pb from '@/pocketbase';
 import { PostWithTags } from '@/types';
 

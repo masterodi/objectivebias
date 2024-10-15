@@ -1,6 +1,5 @@
 'use client';
 
-import { createPost, updatePost } from '@/app/actions/posts.actions';
 import MultiAutocompleteInput from '@/components/autocomplete-input/multi-autocomplete-input';
 import { ACOption } from '@/components/autocomplete-input/types';
 import Input from '@/components/input';
@@ -8,7 +7,9 @@ import Editor from '@/components/rich-text/editor';
 import { useToast } from '@/components/toast';
 import { PostWithTags } from '@/types';
 import { Value } from '@udecode/plate';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import createPost from './(actions)/createPost.action';
+import updatePost from './(actions)/updatePost.action';
 
 type UpsertPostFormProps = {
 	options: any;
@@ -31,13 +32,11 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 			Record<'title' | 'body' | 'tags' | 'slug' | 'created_by', string[]>
 		>;
 	}>();
-	const [error, setError] = useState<string>();
 	const toast = useToast();
 
 	const handleUpsert = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setValidation(undefined);
-		setError(undefined);
 		let res;
 		if (!!data) {
 			res = await updatePost(data.id, {
@@ -52,13 +51,13 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 				tags: tags.map((tag) => tag.value),
 			});
 		}
-		if (res?.validation) setValidation(res?.validation);
-		if (res?.error) setError(res?.error);
+		if (res?.validation) {
+			setValidation(res?.validation);
+		}
+		if (res?.error) {
+			toast.error(res.error);
+		}
 	};
-
-	useEffect(() => {
-		if (error) toast.error(error);
-	}, [error]);
 
 	return (
 		<form

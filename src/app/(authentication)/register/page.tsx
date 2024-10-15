@@ -1,11 +1,11 @@
 'use client';
 
-import { register } from '@/app/actions/auth.actions';
 import Input from '@/components/input';
 import { useToast } from '@/components/toast';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
+import register from '../(actions)/register.action';
 
 export default function Register() {
 	const [state, registerAction, isPending] = useFormState(register, null);

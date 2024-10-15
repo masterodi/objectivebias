@@ -1,4 +1,4 @@
-import AuthService from '@/server/auth.service';
+import getToken from '@/app/(authentication)/(queries)/getToken.query';
 import {
 	NextFetchEvent,
 	NextMiddleware,
@@ -11,7 +11,7 @@ import { isGuestRoute } from './routes';
 export default function withGuestMiddleware(middleware: NextMiddleware) {
 	return async (request: NextRequest, event: NextFetchEvent) => {
 		if (isGuestRoute(request.nextUrl.pathname)) {
-			const token = AuthService.token();
+			const token = await getToken();
 
 			if (token && !isTokenExpired(token)) {
 				const url = request.nextUrl.clone();

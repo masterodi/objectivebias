@@ -1,5 +1,5 @@
-import { deletePost } from '@/app/actions/posts.actions';
-import { getPosts } from '@/app/queries/posts.queries';
+import deletePost from '@/app/(posts)/(actions)/deletePost.action';
+import getPosts from '@/app/(posts)/(queries)/getPosts.query';
 import { Post } from '@/types';
 import { Edit, Trash, View } from 'lucide-react';
 import Link from 'next/link';

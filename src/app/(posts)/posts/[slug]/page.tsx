@@ -1,5 +1,5 @@
-import { getPostBySlug } from '@/app/queries/posts.queries';
 import RichTextDisplay from '@/components/rich-text/rich-text-display';
+import getPostBySlug from '../../(queries)/getPostBySlug.query';
 
 type PostProps = {
 	params: { slug: string };

@@ -2,7 +2,7 @@ import RichTextDisplay from '@/components/rich-text/rich-text-display';
 import { Post } from '@/types';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
-import { getPosts } from './queries/posts.queries';
+import getPosts from './(posts)/(queries)/getPosts.query';
 
 export const revalidate = 0;
 

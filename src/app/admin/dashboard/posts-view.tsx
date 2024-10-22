@@ -104,7 +104,6 @@ type PostsViewProps = {
 
 export default function PostsView({ posts }: PostsViewProps) {
 	const orderByManager = useOrderBy();
-	console.log(orderByManager.toValue());
 	const [orderBy, setOrderBy] = useState(orderByManager.toValue());
 
 	const updatePostsOrderBy = (e: ChangeEvent<HTMLSelectElement>) => {

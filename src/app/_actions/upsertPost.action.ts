@@ -51,8 +51,6 @@ export default async function upsertPost(props: UpsertProps) {
 		.onConflictDoUpdate({ target: posts.id, set: upsertPostData })
 		.returning();
 
-	console.log(upsertPostResult);
-
 	if (tags) {
 		const { id: upsertId } = upsertPostResult[0];
 		await db.delete(tagsToPosts).where(eq(tagsToPosts.postId, upsertId));

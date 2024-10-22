@@ -3,9 +3,9 @@
 import Input from '@/components/input';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
-import useSearchParamsManager from '@/hooks/useSearchParamsManager';
+import useUpsertTag from '@/hooks/useUpsertTag';
 import { Tag } from '@/schemas';
-import { FormEvent, useTransition } from 'react';
+import { useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
 import upsertTag from '../_actions/upsertTag.action';
 
@@ -17,18 +17,12 @@ type UpsertTagFormProps = {
 
 export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 	const isUpdate = !!data;
-	const { isUpsertTagDialogOpen, closeUpsertTagDialog } =
-		useSearchParamsManager();
+	const { isActive, closeDialog } = useUpsertTag();
 	const [isPending, startTransition] = useTransition();
 	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
 		name: data?.name ?? '',
 	});
 	const toast = useToast();
-
-	const handleCloseDialog = (e: FormEvent) => {
-		e.preventDefault();
-		closeUpsertTagDialog();
-	};
 
 	const handleUpsertTag = async () => {
 		setFieldsError(null);
@@ -42,7 +36,7 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 			} else if (error) {
 				toast.error(error);
 			} else if (success) {
-				closeUpsertTagDialog();
+				closeDialog();
 				toast.success(isUpdate ? 'Tag updated' : 'Tag created');
 			}
 		});
@@ -51,8 +45,8 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 	return (
 		<dialog
 			id="upsert-tag-dialog"
-			className={twMerge('modal', isUpsertTagDialogOpen && 'modal-open')}
-			open={isUpsertTagDialogOpen}
+			className={twMerge('modal', isActive && 'modal-open')}
+			open={isActive}
 		>
 			<div className="modal-box">
 				<form
@@ -85,7 +79,10 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 				</form>
 			</div>
 			<form
-				onSubmit={handleCloseDialog}
+				onSubmit={(e) => {
+					e.preventDefault();
+					closeDialog();
+				}}
 				method="dialog"
 				className="modal-backdrop"
 			>

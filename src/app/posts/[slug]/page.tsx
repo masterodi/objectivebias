@@ -1,5 +1,5 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
-import RichTextDisplay from '@/components/rich-text/rich-text-display';
+import MarkdownRender from '@/components/markdown-editor/markdown-render';
 
 export const revalidate = 0;
 
@@ -38,9 +38,9 @@ export default async function Post(props: PostProps) {
 				<h6></h6>
 			</header>
 
-			<article className="prose max-w-none">
-				<RichTextDisplay richText={post.body} />
-			</article>
+			<section className="prose">
+				<MarkdownRender markdown={post.body} />
+			</section>
 
 			<div className="divider" />
 

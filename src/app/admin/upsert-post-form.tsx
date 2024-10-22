@@ -3,10 +3,9 @@
 import MultiAutocompleteInput from '@/components/autocomplete-input/multi-autocomplete-input';
 import { ACOption } from '@/components/autocomplete-input/types';
 import Input from '@/components/input';
-import Editor from '@/components/rich-text/editor';
+import MarkdownEditor from '@/components/markdown-editor/editor';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
-import { Value } from '@udecode/plate';
 import React, { useTransition } from 'react';
 import upsertPost from '../_actions/upsertPost.action';
 import upsertTag from '../_actions/upsertTag.action';
@@ -16,7 +15,7 @@ type UpsertPostFormProps = {
 	data?: {
 		id: string;
 		title: string;
-		body: Value;
+		body: string;
 		tags: { value: string; label: string }[];
 	};
 };
@@ -26,7 +25,7 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 	const [isPending, startTransition] = useTransition();
 	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
 		title: data?.title ?? '',
-		body: data?.body ?? ([] as Value),
+		body: data?.body ?? '',
 		tagInput: '',
 		tags: data?.tags ?? ([] as ACOption<string>[]),
 	});
@@ -36,7 +35,7 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 		setFieldsError(null);
 		const payload = {
 			title: fields.title,
-			body: JSON.stringify(fields.body),
+			body: fields.body,
 			tags: fields.tags.map((tag) => tag.value),
 		};
 		startTransition(async () => {
@@ -72,35 +71,37 @@ export default function UpsertPostForm({ options, data }: UpsertPostFormProps) {
 	return (
 		<form
 			action={handleUpsert}
-			className="m-4 mx-auto grid w-full max-w-xl gap-8 rounded-md bg-base-200 p-8 shadow-lg"
+			className="mx-auto grid w-full max-w-5xl gap-8 p-8"
 		>
-			<h1 className="text-3xl font-bold">
-				{isUpdate ? 'Update Post' : 'Create a new post'}
-			</h1>
 			<Input
-				label="Title"
+				placeholder="Post Title"
 				id="title"
 				name="title"
 				value={fields.title}
 				onChange={(e) =>
-					setFields((prev) => ({ ...prev, title: e.target.value }))
+					setFields((prev) => ({
+						...prev,
+						title: e.target.value,
+					}))
 				}
 				error={fieldsError?.title}
+				className="input-lg text-4xl"
 			/>
-			<Editor
-				label="Body"
-				initialValue={data?.body}
-				onChange={(newValue) =>
-					setFields((prev) => ({ ...prev, body: newValue }))
+			<MarkdownEditor
+				value={fields.body}
+				onChange={(e) =>
+					setFields((prev) => ({ ...prev, body: e.target.value }))
 				}
-				error={fieldsError?.body}
 			/>
 			<MultiAutocompleteInput
-				label="Tags"
+				label="Choose tags"
 				options={options}
 				inputValue={fields.tagInput}
 				onInputChange={(e) =>
-					setFields((prev) => ({ ...prev, tagInput: e.target.value }))
+					setFields((prev) => ({
+						...prev,
+						tagInput: e.target.value,
+					}))
 				}
 				value={fields.tags}
 				onChange={(newValue) => {

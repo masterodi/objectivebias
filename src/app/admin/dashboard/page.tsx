@@ -13,20 +13,24 @@ type DashboardProps = {
 		view?: 'posts' | 'tags';
 		'upsert-tag'?: 'true';
 		tag?: string;
+		orderBy?: 'title' | 'slug' | 'createdAt' | 'updatedAt';
+		orderDir?: 'asc' | 'desc';
 	};
 };
 
 export default async function Dashboard({ searchParams }: DashboardProps) {
-	const { view, 'upsert-tag': upsertTag, tag } = searchParams;
+	const { view } = searchParams;
 	const isPostsView = !view || view === 'posts';
 	const isTagsView = view === 'tags';
 
 	if (isPostsView) {
-		const posts = await getPosts();
+		const { orderBy, orderDir } = searchParams;
+		const posts = await getPosts({ orderBy, orderDir });
 		return <PostsView posts={posts} />;
 	}
 
 	if (isTagsView) {
+		const { 'upsert-tag': upsertTag, tag } = searchParams;
 		const tags = await getTags();
 		let tagData: Tag | undefined;
 		if (tag) {

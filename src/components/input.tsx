@@ -1,9 +1,11 @@
 import { InputHTMLAttributes } from 'react';
+import { twMerge } from 'tailwind-merge';
 import ErrorDisplay from './error-display';
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 	label?: string;
 	error?: string | string[];
+	ghost?: boolean;
 };
 
 export default function Input(props: InputProps) {
@@ -14,6 +16,7 @@ export default function Input(props: InputProps) {
 		defaultValue,
 		label,
 		error,
+		ghost,
 		className,
 		...rest
 	} = props;
@@ -29,7 +32,13 @@ export default function Input(props: InputProps) {
 				type={type}
 				name={name}
 				id={id}
-				className={`input input-bordered ${error && 'input-error'} w-full`}
+				className={twMerge(
+					'input w-full',
+					!ghost && 'input-bordered',
+					ghost && 'input-ghost',
+					error && 'input-error',
+					className
+				)}
 				defaultValue={defaultValue}
 				{...rest}
 			/>

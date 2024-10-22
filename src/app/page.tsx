@@ -1,4 +1,3 @@
-import RichTextDisplay from '@/components/rich-text/rich-text-display';
 import { Post } from '@/schemas';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
@@ -22,7 +21,6 @@ function PostCard({ post, className }: PostCardProps) {
 		>
 			<div className="card-body max-h-full">
 				<h2 className="card-title">{post.title}</h2>
-				<RichTextDisplay richText={post.body} />
 				<div className="card-actions mt-auto justify-end">
 					<button className="btn btn-link btn-primary">
 						Read More

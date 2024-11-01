@@ -7,8 +7,9 @@ import {
 	InsertTag,
 	validate,
 } from '@/schemas';
+import { createSlug } from '@/utils';
 import { revalidatePath } from 'next/cache';
-import getTagByName from '../_queries/getTagByName.query';
+import getTagBySlug from '../_queries/getTagBySlug.query';
 import validateRequest from '../_queries/validateRequest.query';
 
 type UpsertTagProps = { id?: string; payload: CreateTagPayload };
@@ -27,16 +28,21 @@ export default async function upsertTag(props: UpsertTagProps) {
 	}
 
 	const { name } = data;
+	const slug = createSlug(name);
 
-	const existingNameTag = await getTagByName(name);
-	if (existingNameTag) {
-		const isSameTag = id === existingNameTag.id;
+	const existingSlugTag = await getTagBySlug(slug);
+	if (existingSlugTag) {
+		const isSameTag = id === existingSlugTag.id;
 		if (!isSameTag) {
 			return { error: 'Tag name is already used' };
 		}
 	}
 
-	const upsertTagData = { name, createdBy: user.id } satisfies InsertTag;
+	const upsertTagData = {
+		name,
+		slug,
+		createdBy: user.id,
+	} satisfies InsertTag;
 	const upsertTagResult = await db
 		.insert(tags)
 		.values({ id, ...upsertTagData })

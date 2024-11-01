@@ -1,41 +1,37 @@
 import getPosts from '@/app/_queries/getPosts.query';
 import getTagById from '@/app/_queries/getTagById.query';
 import getTags from '@/app/_queries/getTags.query';
-import { Tag } from '@/schemas';
-import UpsertTagForm from '../upsert-tag-form';
-import PostsView from './posts-view';
-import TagsView from './tags-view';
-
-export const revalidate = 0;
+import {
+	OrderDir,
+	PostsFilter,
+	PostsOrderBy,
+	UpsertTagIdSearchParam,
+	UpsertTagSearchParam,
+	ViewSearchParam,
+} from '@/types';
+import UpsertTagForm from '../_upsert-tag-form';
+import PostsView from './_posts-view';
+import TagsView from './_tags-view';
 
 type DashboardProps = {
-	searchParams: {
-		view?: 'posts' | 'tags';
-		'upsert-tag'?: 'true';
-		tag?: string;
-		orderBy?: 'title' | 'slug' | 'createdAt' | 'updatedAt';
-		orderDir?: 'asc' | 'desc';
-	};
+	searchParams: Promise<{
+		view?: ViewSearchParam;
+		'upsert-tag'?: UpsertTagSearchParam;
+		'upsert-id'?: UpsertTagIdSearchParam;
+		'order-by'?: PostsOrderBy;
+		'order-dir'?: OrderDir;
+		tag?: PostsFilter['tag'];
+	}>;
 };
 
-export default async function Dashboard({ searchParams }: DashboardProps) {
+export default async function Dashboard(props: DashboardProps) {
+	const searchParams = await props.searchParams;
 	const { view } = searchParams;
-	const isPostsView = !view || view === 'posts';
-	const isTagsView = view === 'tags';
 
-	if (isPostsView) {
-		const { orderBy, orderDir } = searchParams;
-		const posts = await getPosts({ orderBy, orderDir });
-		return <PostsView posts={posts} />;
-	}
-
-	if (isTagsView) {
-		const { 'upsert-tag': upsertTag, tag } = searchParams;
+	if (view === 'tags') {
+		const { 'upsert-tag': upsertTag, 'upsert-id': upsertId } = searchParams;
 		const tags = await getTags();
-		let tagData: Tag | undefined;
-		if (tag) {
-			tagData = await getTagById(tag);
-		}
+		const tagData = upsertId ? await getTagById(upsertId) : undefined;
 		return (
 			<>
 				<TagsView tags={tags} />
@@ -44,5 +40,8 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
 		);
 	}
 
-	return null;
+	const { 'order-by': orderBy, 'order-dir': orderDir, tag } = searchParams;
+	const posts = await getPosts({ orderBy, orderDir, filter: { tag } });
+	const tags = await getTags();
+	return <PostsView posts={posts} tags={tags} />;
 }

@@ -15,10 +15,10 @@ type RootLayoutProps = Readonly<{ children: React.ReactNode }>;
 export default async function RootLayout({ children }: RootLayoutProps) {
 	return (
 		<html lang="en">
-			<body className="font-sans">
+			<body className="layout font-sans">
 				<Providers>
 					<Navbar />
-					{children}
+					<main className="container mx-auto p-4">{children}</main>
 					<Footer />
 				</Providers>
 			</body>

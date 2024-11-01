@@ -5,7 +5,7 @@ import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import useUpsertTag from '@/hooks/useUpsertTag';
 import { Tag } from '@/schemas';
-import { useTransition } from 'react';
+import { FormEvent, useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
 import upsertTag from '../_actions/upsertTag.action';
 
@@ -24,7 +24,8 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 	});
 	const toast = useToast();
 
-	const handleUpsertTag = async () => {
+	const handleUpsertTag = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		setFieldsError(null);
 		startTransition(async () => {
 			const { validationError, error, success } = await upsertTag({
@@ -50,7 +51,7 @@ export default function UpsertTagForm({ data }: UpsertTagFormProps) {
 		>
 			<div className="modal-box">
 				<form
-					action={handleUpsertTag}
+					onSubmit={handleUpsertTag}
 					className="grid w-full max-w-xl gap-8"
 				>
 					<h1 className="text-3xl font-bold">

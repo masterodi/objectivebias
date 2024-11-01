@@ -7,7 +7,6 @@ export const UserSchema = object({
 	id: string().required(),
 	email: string().required(),
 	username: string().required(),
-	password: string().required(),
 	role: string().default('user'),
 	createdAt: string().datetime().required(),
 	updatedAt: string().datetime().required(),
@@ -16,6 +15,7 @@ export const UserSchema = object({
 export const TagSchema = object({
 	id: string().required(),
 	name: string().required(),
+	slug: string().required(),
 	createdAt: string().datetime().required(),
 	createdBy: string().required(),
 });
@@ -25,7 +25,6 @@ export const PostSchema = object({
 	title: string().required(),
 	slug: string().required(),
 	body: string().required(),
-	tags: array(TagSchema.required()).required(),
 	createdBy: string().required(),
 	createdAt: string().datetime().required(),
 	updatedAt: string().datetime().required(),

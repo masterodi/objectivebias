@@ -1,15 +1,14 @@
 import { User } from 'lucia';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import logout from './_actions/logout.action';
-import AdminDrawer from './_admin-drawer';
+import NavDrawer from './_nav-drawer';
 import getUser from './_queries/getUser.query';
 
 const SITE_NAME = 'ObjectiveBias';
 
 function GuestNavbar() {
 	return (
-		<nav className="navbar sticky top-0 z-10 bg-base-300">
+		<nav className="navbar sticky top-4 z-10 m-4 w-auto rounded-md bg-base-300">
 			<div className="navbar-start">
 				<Link href="/" className="btn btn-link text-2xl font-bold">
 					{SITE_NAME}
@@ -27,7 +26,7 @@ function GuestNavbar() {
 
 async function UserNavbar({ user }: { user: User }) {
 	return (
-		<nav className="navbar sticky top-0 z-10 bg-base-300">
+		<nav className="navbar sticky top-4 z-10 mx-4 mt-4 w-auto rounded-md bg-base-300">
 			<div className="navbar-start">
 				<Link href="/" className="btn btn-link text-2xl font-bold">
 					{SITE_NAME}
@@ -35,13 +34,7 @@ async function UserNavbar({ user }: { user: User }) {
 			</div>
 			<div className="navbar-end gap-4">
 				<span>{user.username}</span>
-				<form action={logout}>
-					<button type="submit" className="btn btn-ghost">
-						Log Out
-					</button>
-				</form>
-
-				{user.role === 'moderator' && <AdminDrawer />}
+				<NavDrawer user={user} />
 			</div>
 		</nav>
 	);

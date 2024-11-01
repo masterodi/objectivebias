@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+	.layout {
+		@apply flex min-h-screen flex-col;
+	}
+}

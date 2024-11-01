@@ -38,6 +38,7 @@ export const tags = sqliteTable('tags', {
 		.primaryKey()
 		.$defaultFn(() => createId()),
 	name: text('name').notNull().unique(),
+	slug: text('slug').notNull().unique(),
 	createdAt: text('created_at')
 		.notNull()
 		.default(sql`CURRENT_TIMESTAMP`),

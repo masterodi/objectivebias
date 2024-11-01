@@ -1,39 +1,38 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
+import Badge from '@/components/badge';
 import MarkdownRender from '@/components/markdown-editor/markdown-render';
 
-export const revalidate = 0;
-
 type PostProps = {
-	params: { slug: string };
+	params: Promise<{ slug: string }>;
 };
 
 export default async function Post(props: PostProps) {
-	const post = await getPostBySlug(props.params.slug);
+	const params = await props.params;
+	const post = await getPostBySlug(params.slug);
 
 	if (!post) {
 		return (
-			<main className="mx-auto my-12 min-h-screen w-full max-w-5xl p-4">
+			<div>
 				<h1 className="text-4xl font-bold">
 					Post not found. It was either renamed or deleted.
 				</h1>
-			</main>
+			</div>
 		);
 	}
 
 	return (
-		<main className="mx-auto my-12 min-h-screen w-full max-w-5xl p-4">
+		<div>
 			<header className="mb-12">
 				<h1 className="mb-2 text-4xl font-bold">{post.title}</h1>
-				<div className="mb-4 flex gap-2">
+				<div className="mb-4 flex gap-1">
 					{post.tags.map((tag) => (
-						<div key={tag.id} className="badge badge-primary">
-							{tag.name}
-						</div>
+						<Badge key={tag.id}>{tag.name}</Badge>
 					))}
 				</div>
 				<h6>
 					{new Date(post.createdAt).toLocaleString()}, <br />
-					edited: {new Date(post.updatedAt).toLocaleString()}
+					<strong>edited:</strong>{' '}
+					{new Date(post.updatedAt).toLocaleString()}
 				</h6>
 				<h6></h6>
 			</header>
@@ -44,7 +43,7 @@ export default async function Post(props: PostProps) {
 
 			<div className="divider" />
 
-			<footer className="flex gap-4 rounded-md bg-base-200 p-4">
+			<footer className="flex gap-4 rounded-md bg-base-300 p-4">
 				<div className="avatar">
 					<div className="mask mask-squircle h-12 w-12">
 						<img
@@ -58,6 +57,6 @@ export default async function Post(props: PostProps) {
 					<span className="text-primary">{post.user.username}</span>
 				</h4>
 			</footer>
-		</main>
+		</div>
 	);
 }

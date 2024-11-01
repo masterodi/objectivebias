@@ -1,7 +1,7 @@
 import getTags from '@/app/_queries/getTags.query';
 import validateRequest from '@/app/_queries/validateRequest.query';
-import UpsertPostForm from '@/app/admin/upsert-post-form';
 import { redirect } from 'next/navigation';
+import UpsertPostForm from '../../_upsert-post-form';
 
 export default async function CreatePost() {
 	const { session } = await validateRequest();
@@ -10,14 +10,11 @@ export default async function CreatePost() {
 		return redirect('/login');
 	}
 
-	const tags = (await getTags()).map((tag) => ({
-		value: tag.id,
-		label: tag.name,
-	}));
+	const tags = await getTags();
 
 	return (
-		<div className="grid min-h-screen place-items-center">
-			<UpsertPostForm options={tags} />
+		<div className="container mx-auto max-w-6xl p-4">
+			<UpsertPostForm tags={tags} />
 		</div>
 	);
 }

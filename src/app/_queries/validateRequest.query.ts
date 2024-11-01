@@ -10,7 +10,8 @@ type ValidateRequestResponse = Promise<
 >;
 
 const validateRequest = cache(async (): ValidateRequestResponse => {
-	const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+	const cookieStore = await cookies();
+	const sessionId = cookieStore.get(lucia.sessionCookieName)?.value ?? null;
 	if (!sessionId) {
 		return {
 			user: null,
@@ -23,7 +24,7 @@ const validateRequest = cache(async (): ValidateRequestResponse => {
 	try {
 		if (result.session && result.session.fresh) {
 			const sessionCookie = lucia.createSessionCookie(result.session.id);
-			cookies().set(
+			cookieStore.set(
 				sessionCookie.name,
 				sessionCookie.value,
 				sessionCookie.attributes
@@ -31,7 +32,7 @@ const validateRequest = cache(async (): ValidateRequestResponse => {
 		}
 		if (!result.session) {
 			const sessionCookie = lucia.createBlankSessionCookie();
-			cookies().set(
+			cookieStore.set(
 				sessionCookie.name,
 				sessionCookie.value,
 				sessionCookie.attributes

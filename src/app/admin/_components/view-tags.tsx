@@ -12,11 +12,11 @@ import Link from 'next/link';
 import { FormEvent, useTransition } from 'react';
 import getTags from '../../_queries/getTags.query';
 
-type TagsViewProps = {
+type ViewTagsProps = {
 	tags: Awaited<ReturnType<typeof getTags>>;
 };
 
-export default function TagsView({ tags }: TagsViewProps) {
+export default function ViewTags({ tags }: ViewTagsProps) {
 	const hasTags = !!tags.length;
 
 	return (

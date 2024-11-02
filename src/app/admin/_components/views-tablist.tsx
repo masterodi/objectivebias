@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
-export default function ViewsTabs() {
+export default function ViewsTablist() {
 	const searchParams = useSearchParams();
 	const view = searchParams.get('view');
 	const isPostsView = !view || view === 'posts';

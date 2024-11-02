@@ -11,14 +11,14 @@ import { getDate } from '@/utils';
 import { Edit, EllipsisVertical, Trash, View } from 'lucide-react';
 import Link from 'next/link';
 import { FormEvent, useTransition } from 'react';
-import PostsFiltersDrawer from './_posts-filters-drawer';
+import DrawerPostsFilters from './drawer-posts-filters';
 
-type PostsViewProps = {
+type ViewPostsProps = {
 	posts: (Post & { tags: Tag[]; user: User })[];
 	tags: Tag[];
 };
 
-export default function PostsView({ posts, tags }: PostsViewProps) {
+export default function ViewPosts({ posts, tags }: ViewPostsProps) {
 	const hasPosts = !!posts.length;
 
 	return (
@@ -27,7 +27,7 @@ export default function PostsView({ posts, tags }: PostsViewProps) {
 				<PostsList posts={posts} />
 			:	<NoPosts />}
 
-			<PostsFiltersDrawer tags={tags} />
+			<DrawerPostsFilters tags={tags} />
 		</div>
 	);
 }
@@ -40,7 +40,7 @@ function NoPosts() {
 	);
 }
 
-function PostsList({ posts }: { posts: PostsViewProps['posts'] }) {
+function PostsList({ posts }: { posts: ViewPostsProps['posts'] }) {
 	return (
 		<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 			{posts.map((post) => (

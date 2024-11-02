@@ -7,27 +7,30 @@ import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import { Tag } from '@/schemas';
 import { FormEvent, useTransition } from 'react';
-import upsertPost from '../_actions/upsertPost.action';
-import SelectTagsInput from './_select-tags-input';
+import upsertPost from '../../_actions/upsertPost.action';
+import SelectTags from './select-tags';
 
-type UpsertPostFormProps = {
-	tags: Tag[];
-	data?: {
-		id: string;
-		title: string;
-		body: string;
-		tags: { value: string; label: string }[];
+type FormUpsertPostProps = {
+	data: {
+		tags: Tag[];
+		post?: {
+			id: string;
+			title: string;
+			body: string;
+			tags: { value: string; label: string }[];
+		};
 	};
 };
 
-export default function UpsertPostForm({ tags, data }: UpsertPostFormProps) {
-	const isUpdate = !!data;
+export default function FormUpsertPost({ data }: FormUpsertPostProps) {
+	const { tags, post } = data;
+	const isUpdate = !!post;
 	const [isPending, startTransition] = useTransition();
 	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
-		title: data?.title ?? '',
-		body: data?.body ?? '',
+		title: post?.title ?? '',
+		body: post?.body ?? '',
 		tagInput: '',
-		tags: data?.tags ?? ([] as ACValue<string, true>),
+		tags: post?.tags ?? ([] as ACValue<string, true>),
 	});
 	const toast = useToast();
 
@@ -41,7 +44,7 @@ export default function UpsertPostForm({ tags, data }: UpsertPostFormProps) {
 		};
 		startTransition(async () => {
 			const { validationError, error } = await upsertPost({
-				id: data?.id,
+				id: post?.id,
 				payload,
 			});
 			if (validationError) {
@@ -77,7 +80,7 @@ export default function UpsertPostForm({ tags, data }: UpsertPostFormProps) {
 					setFields((prev) => ({ ...prev, body: e.target.value }))
 				}
 			/>
-			<SelectTagsInput
+			<SelectTags
 				tags={tags}
 				inputValue={fields.tagInput}
 				onInputChange={(e) =>

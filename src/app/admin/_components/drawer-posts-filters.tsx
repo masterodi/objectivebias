@@ -6,7 +6,7 @@ import { Tag } from '@/schemas';
 import { Settings2 } from 'lucide-react';
 import { ChangeEvent } from 'react';
 
-type PostsFiltersDrawerProps = {
+type DrawerPostsFiltersProps = {
 	tags: Tag[];
 };
 
@@ -23,7 +23,7 @@ const orderByOptions = [
 	{ label: 'Updated At DESC', value: 'updateAt:desc' },
 ];
 
-export default function PostsFiltersDrawer({ tags }: PostsFiltersDrawerProps) {
+export default function DrawerPostsFilters({ tags }: DrawerPostsFiltersProps) {
 	const orderBy = useOrderBy();
 	const { tagFilter } = useFilters();
 

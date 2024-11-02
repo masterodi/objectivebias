@@ -7,15 +7,13 @@ import useUpsertTag from '@/hooks/useUpsertTag';
 import { Tag } from '@/schemas';
 import { FormEvent, useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
-import upsertTag from '../_actions/upsertTag.action';
+import upsertTag from '../../_actions/upsertTag.action';
 
-const DIALOG_SEARCH_PARAM = 'upsert-tag';
-
-type UpsertTagFormProps = {
+type FormUpsertTagProps = {
 	data?: Tag;
 };
 
-export default function UpsertTagForm({ data }: UpsertTagFormProps) {
+export default function FormUpsertTag({ data }: FormUpsertTagProps) {
 	const isUpdate = !!data;
 	const { isActive, closeDialog } = useUpsertTag();
 	const [isPending, startTransition] = useTransition();

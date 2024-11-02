@@ -3,9 +3,9 @@ import { ACValue } from '@/components/autocomplete-input/types';
 import { useToast } from '@/components/toast';
 import { Tag } from '@/schemas';
 import { ChangeEvent, useTransition } from 'react';
-import upsertTag from '../_actions/upsertTag.action';
+import upsertTag from '../../_actions/upsertTag.action';
 
-type SelectTagsInputProps = {
+type SelectTagsProps = {
 	tags: Tag[];
 	inputValue: string;
 	onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -14,14 +14,14 @@ type SelectTagsInputProps = {
 	error?: string | string[];
 };
 
-export default function SelectTagsInput({
+export default function SelectTags({
 	tags,
 	inputValue,
 	onInputChange,
 	value,
 	onChange,
 	error,
-}: SelectTagsInputProps) {
+}: SelectTagsProps) {
 	const [isPending, startTransition] = useTransition();
 	const toast = useToast();
 

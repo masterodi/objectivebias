@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import ViewsTabs from './_views-tabs';
+import ViewsTablist from '../_components/views-tablist';
 
 type DashboardLayoutProps = {
 	children: ReactNode;
@@ -8,7 +8,7 @@ type DashboardLayoutProps = {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
 	return (
 		<div>
-			<ViewsTabs />
+			<ViewsTablist />
 			<div className="mt-4">{children}</div>
 		</div>
 	);

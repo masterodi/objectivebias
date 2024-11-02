@@ -1,7 +1,7 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
 import getTags from '@/app/_queries/getTags.query';
 import validateRequest from '@/app/_queries/validateRequest.query';
-import UpsertPostForm from '@/app/admin/_upsert-post-form';
+import FormUpsertPost from '@/app/admin/_components/form-upsert-post';
 import { redirect } from 'next/navigation';
 
 export default async function EditPost(props: any) {
@@ -28,7 +28,7 @@ export default async function EditPost(props: any) {
 
 	return (
 		<div className="grid min-h-screen place-items-center">
-			<UpsertPostForm tags={tags} data={postData} />
+			<FormUpsertPost tags={tags} data={postData} />
 		</div>
 	);
 }

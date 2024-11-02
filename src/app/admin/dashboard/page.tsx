@@ -9,9 +9,9 @@ import {
 	UpsertTagSearchParam,
 	ViewSearchParam,
 } from '@/types';
-import UpsertTagForm from '../_upsert-tag-form';
-import PostsView from './_posts-view';
-import TagsView from './_tags-view';
+import FormUpsertTag from '../_components/form-upsert-tag';
+import ViewPosts from '../_components/view-posts';
+import ViewTags from '../_components/view-tags';
 
 type DashboardProps = {
 	searchParams: Promise<{
@@ -34,8 +34,8 @@ export default async function Dashboard(props: DashboardProps) {
 		const tagData = upsertId ? await getTagById(upsertId) : undefined;
 		return (
 			<>
-				<TagsView tags={tags} />
-				{upsertTag && <UpsertTagForm data={tagData} />}
+				<ViewTags tags={tags} />
+				{upsertTag && <FormUpsertTag data={tagData} />}
 			</>
 		);
 	}
@@ -43,5 +43,5 @@ export default async function Dashboard(props: DashboardProps) {
 	const { 'order-by': orderBy, 'order-dir': orderDir, tag } = searchParams;
 	const posts = await getPosts({ orderBy, orderDir, filter: { tag } });
 	const tags = await getTags();
-	return <PostsView posts={posts} tags={tags} />;
+	return <ViewPosts posts={posts} tags={tags} />;
 }

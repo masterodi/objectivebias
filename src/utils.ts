@@ -1,3 +1,9 @@
+export const getDate = (date: string) => {
+	return new Date(date).toLocaleString('en-GB', {
+		hour12: false,
+	});
+};
+
 export function createSlug(value: string) {
 	return value
 		.trim() // remove whitespaces at the start and end of string
@@ -8,37 +14,21 @@ export function createSlug(value: string) {
 		.replace(/-+$/g, ''); // remove one or more dash at the end of the string
 }
 
-export const ViewSearchParam = {
-	name: 'view',
-	value: {
-		posts: 'posts',
-		tags: 'tags',
-	},
+export const ORDER_DIR_NAME = 'order-dir';
+export const ORDER_DIR = {
+	asc: 'asc',
+	desc: 'desc',
 };
-export const UpsertTagSearchParam = {
-	name: 'upsert-tag',
-	value: {
-		active: 'true',
-	},
-};
-export const UpsertIdSearchParam = {
-	name: 'upsert-id',
-	value: (id: string) => id,
-};
-export const OrderDirSearchParam = {
-	name: 'order-dir',
-	value: (dir: 'asc' | 'desc') => dir,
-};
-export const OrderBySearchParam = {
-	name: 'order-by',
-	value: (orderBy: string) => orderBy,
-};
-export const TagFilterSearchParam = {
-	name: 'tag',
-	value: (tag: string) => tag,
-};
+export const ORDER_BY_NAME = 'order-by';
 
-export const getDate = (date: string) =>
-	new Date(date).toLocaleString('en-GB', {
-		hour12: false,
-	});
+export const TAG_FILTER_NAME = 'tag';
+
+export const UPSERT_TAG_NAME = 'upsert-tag';
+export const UPSERT_ID_NAME = 'upsert-id';
+
+export const DASHBOARD_POSTS_VIEW_URL = '/admin/dashboard?view=posts';
+export const DASHBOARD_TAGS_VIEW_URL = '/admin/dashboard?view=tags';
+
+export const CREATE_TAG_URL = `/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true`;
+export const UPDATE_TAG_URL = (tagId: string) =>
+	`/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true&${UPSERT_ID_NAME}=${tagId}`;

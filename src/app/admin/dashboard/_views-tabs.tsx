@@ -1,6 +1,6 @@
 'use client';
 
-import { ViewSearchParam } from '@/utils';
+import { DASHBOARD_POSTS_VIEW_URL, DASHBOARD_TAGS_VIEW_URL } from '@/utils';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
@@ -8,20 +8,20 @@ import { twMerge } from 'tailwind-merge';
 export default function ViewsTabs() {
 	const searchParams = useSearchParams();
 	const view = searchParams.get('view');
-	const isPostsView = !view || view === ViewSearchParam.value.posts;
-	const isTagsView = view === ViewSearchParam.value.tags;
+	const isPostsView = !view || view === 'posts';
+	const isTagsView = view === 'tags';
 
 	return (
 		<div role="tablist" className="tabs-boxed tabs">
 			<Link
-				href={`/admin/dashboard?${ViewSearchParam.name}=${ViewSearchParam.value.posts}`}
+				href={DASHBOARD_POSTS_VIEW_URL}
 				role="tab"
 				className={twMerge('tab', isPostsView && 'tab-active')}
 			>
 				Posts
 			</Link>
 			<Link
-				href={`/admin/dashboard?${ViewSearchParam.name}=${ViewSearchParam.value.tags}`}
+				href={DASHBOARD_TAGS_VIEW_URL}
 				role="tab"
 				className={twMerge('tab', isTagsView && 'tab-active')}
 			>

@@ -23,18 +23,29 @@ export default function PostsView({ posts, tags }: PostsViewProps) {
 
 	return (
 		<div>
-			{!hasPosts ?
-				<div className="grid min-h-screen flex-1 place-items-center text-5xl">
-					No post created so far. Create one and check again.
-				</div>
-			:	<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-					{posts.map((post) => (
-						<CardPost key={post.id} post={post} />
-					))}
-				</div>
-			}
+			{hasPosts ?
+				<PostsList posts={posts} />
+			:	<NoPosts />}
 
 			<PostsFiltersDrawer tags={tags} />
+		</div>
+	);
+}
+
+function NoPosts() {
+	return (
+		<div className="grid min-h-screen flex-1 place-items-center text-5xl">
+			No post created so far. Create one and check again.
+		</div>
+	);
+}
+
+function PostsList({ posts }: { posts: PostsViewProps['posts'] }) {
+	return (
+		<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+			{posts.map((post) => (
+				<CardPost key={post.id} post={post} />
+			))}
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { OrderBySearchParam, OrderDirSearchParam } from '@/utils';
+import { ORDER_BY_NAME, ORDER_DIR_NAME } from '@/utils';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const useOrderBy = () => {
@@ -12,8 +12,8 @@ const useOrderBy = () => {
 	};
 
 	const toValue = () => {
-		const orderBy = sps.get(OrderBySearchParam.name);
-		const orderDir = sps.get(OrderDirSearchParam.name);
+		const orderBy = sps.get(ORDER_BY_NAME);
+		const orderDir = sps.get(ORDER_DIR_NAME);
 		return `${orderBy}${orderDir ? `:${orderDir}` : ''}`;
 	};
 
@@ -23,8 +23,8 @@ const useOrderBy = () => {
 		let newSearchParams = new URLSearchParams(sps.toString());
 
 		if (!value) {
-			newSearchParams.delete(OrderBySearchParam.name);
-			newSearchParams.delete(OrderDirSearchParam.name);
+			newSearchParams.delete(ORDER_BY_NAME);
+			newSearchParams.delete(ORDER_DIR_NAME);
 			return router.push(`${pathname}?${newSearchParams}`);
 		}
 
@@ -38,15 +38,15 @@ const useOrderBy = () => {
 			:	value.orderDir;
 
 		if (orderBy) {
-			newSearchParams.set(OrderBySearchParam.name, orderBy);
+			newSearchParams.set(ORDER_BY_NAME, orderBy);
 		} else {
-			newSearchParams.delete(OrderDirSearchParam.name);
+			newSearchParams.delete(ORDER_DIR_NAME);
 		}
 
 		if (orderDir) {
-			newSearchParams.set(OrderDirSearchParam.name, orderDir);
+			newSearchParams.set(ORDER_DIR_NAME, orderDir);
 		} else {
-			newSearchParams.delete(OrderDirSearchParam.name);
+			newSearchParams.delete(ORDER_DIR_NAME);
 		}
 
 		return router.push(`${pathname}?${newSearchParams}`);

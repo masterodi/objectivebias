@@ -6,12 +6,7 @@ import CardActions from '@/components/card/card-actions';
 import CardBody from '@/components/card/card-body';
 import { useToast } from '@/components/toast';
 import { Tag } from '@/schemas';
-import {
-	getDate,
-	UpsertIdSearchParam,
-	UpsertTagSearchParam,
-	ViewSearchParam,
-} from '@/utils';
+import { CREATE_TAG_URL, getDate, UPDATE_TAG_URL } from '@/utils';
 import { Edit, EllipsisVertical, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { FormEvent, useTransition } from 'react';
@@ -24,35 +19,38 @@ type TagsViewProps = {
 export default function TagsView({ tags }: TagsViewProps) {
 	const hasTags = !!tags.length;
 
-	if (!hasTags) {
-		return (
-			<div className="grid min-h-screen flex-1 place-items-center text-5xl">
-				No tags created so far. Create one and check again.
-				<div className="toast">
-					<Link
-						href={`/admin/dashboard?${ViewSearchParam.name}=${ViewSearchParam.value.tags}&${UpsertTagSearchParam.name}=${UpsertTagSearchParam.value.active}`}
-						className="btn btn-square btn-accent"
-					>
-						<Plus />
-					</Link>
-				</div>
-			</div>
-		);
-	}
-
 	return (
-		<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-			{tags.map((tag) => (
-				<CardTag key={tag.id} tag={tag} />
-			))}
+		<div>
+			{hasTags ?
+				<TagsList tags={tags} />
+			:	<NoTags />}
+
 			<div className="toast">
 				<Link
-					href={`/admin/dashboard?${ViewSearchParam.name}=${ViewSearchParam.value.tags}&${UpsertTagSearchParam.name}=${UpsertTagSearchParam.value.active}`}
+					href={CREATE_TAG_URL}
 					className="btn btn-square btn-accent"
 				>
 					<Plus />
 				</Link>
 			</div>
+		</div>
+	);
+}
+
+function NoTags() {
+	return (
+		<div className="grid min-h-screen flex-1 place-items-center text-5xl">
+			No tags created so far. Create one and check again.
+		</div>
+	);
+}
+
+function TagsList({ tags }: { tags: Tag[] }) {
+	return (
+		<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+			{tags.map((tag) => (
+				<CardTag key={tag.id} tag={tag} />
+			))}
 		</div>
 	);
 }
@@ -107,10 +105,7 @@ function DropdownTagActions({ tag }: { tag: Tag }) {
 				className="menu dropdown-content z-[1] w-52 rounded-box bg-base-300 p-2 shadow"
 			>
 				<li>
-					<Link
-						href={`/admin/dashboard?${ViewSearchParam.name}=${ViewSearchParam.value.tags}&${UpsertTagSearchParam.name}=${UpsertTagSearchParam.value.active}&${UpsertIdSearchParam.name}=${tag.id}`}
-						className="flex gap-2"
-					>
+					<Link href={UPDATE_TAG_URL(tag.id)} className="flex gap-2">
 						<Edit /> Edit
 					</Link>
 				</li>

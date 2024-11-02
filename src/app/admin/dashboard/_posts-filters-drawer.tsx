@@ -25,7 +25,7 @@ const orderByOptions = [
 
 export default function PostsFiltersDrawer({ tags }: PostsFiltersDrawerProps) {
 	const orderBy = useOrderBy();
-	const { postsTag } = useFilters();
+	const { tagFilter } = useFilters();
 
 	const updateOrderBy = (e: ChangeEvent<HTMLSelectElement>) => {
 		const orderByValue = e.target.value;
@@ -34,7 +34,8 @@ export default function PostsFiltersDrawer({ tags }: PostsFiltersDrawerProps) {
 
 	const updateTag = (e: ChangeEvent<HTMLInputElement>) => {
 		const shouldRemove = !e.target.checked;
-		postsTag.pushUpdate(e.target.value, {
+		const tagValue = e.target.value;
+		tagFilter.pushUpdate(tagValue, {
 			action: shouldRemove ? 'remove' : 'append',
 		});
 	};
@@ -73,7 +74,7 @@ export default function PostsFiltersDrawer({ tags }: PostsFiltersDrawerProps) {
 									type="checkbox"
 									name={tag.slug}
 									value={tag.slug}
-									checked={postsTag.hasTag(tag.slug)}
+									checked={tagFilter.hasTag(tag.slug)}
 									onChange={updateTag}
 									className="checkbox"
 								/>

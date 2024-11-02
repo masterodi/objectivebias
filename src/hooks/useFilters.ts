@@ -1,4 +1,4 @@
-import { TagFilterSearchParam } from '@/utils';
+import { TAG_FILTER_NAME } from '@/utils';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const useFilters = () => {
@@ -39,14 +39,10 @@ const useFilters = () => {
 		};
 
 	return {
-		postsTag: {
-			getValue: getValue(TagFilterSearchParam.name),
-			pushUpdate: pushUpdate(TagFilterSearchParam.name),
-			hasTag: (tag: string) =>
-				sps.has(
-					TagFilterSearchParam.name,
-					TagFilterSearchParam.value(tag)
-				),
+		tagFilter: {
+			getValue: getValue(TAG_FILTER_NAME),
+			pushUpdate: pushUpdate(TAG_FILTER_NAME),
+			hasTag: (tag: string) => sps.has(TAG_FILTER_NAME, tag),
 		},
 	};
 };

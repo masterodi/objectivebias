@@ -14,7 +14,7 @@ export default async function CreatePost() {
 
 	return (
 		<div className="container mx-auto max-w-6xl p-4">
-			<FormUpsertPost tags={tags} />
+			<FormUpsertPost data={{ tags }} />
 		</div>
 	);
 }

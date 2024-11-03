@@ -28,7 +28,7 @@ export default async function EditPost(props: any) {
 
 	return (
 		<div className="grid min-h-screen place-items-center">
-			<FormUpsertPost tags={tags} data={postData} />
+			<FormUpsertPost data={{ tags, post: postData }} />
 		</div>
 	);
 }

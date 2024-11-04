@@ -1,19 +1,3 @@
-export const getDate = (date: string) => {
-	return new Date(date).toLocaleString('en-GB', {
-		hour12: false,
-	});
-};
-
-export function createSlug(value: string) {
-	return value
-		.trim() // remove whitespaces at the start and end of string
-		.toLowerCase()
-		.replace(/^-+/g, '') // remove one or more dash at the start of the string
-		.replace(/[^\w-]+/g, '-') // convert any on-alphanumeric character to a dash
-		.replace(/-+/g, '-') // convert consecutive dashes to singuar one
-		.replace(/-+$/g, ''); // remove one or more dash at the end of the string
-}
-
 export const ORDER_DIR_NAME = 'order-dir';
 export const ORDER_DIR = {
 	asc: 'asc',
@@ -32,3 +16,51 @@ export const DASHBOARD_TAGS_VIEW_URL = '/admin/dashboard?view=tags';
 export const CREATE_TAG_URL = `/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true`;
 export const UPDATE_TAG_URL = (tagId: string) =>
 	`/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true&${UPSERT_ID_NAME}=${tagId}`;
+
+export const getDate = (date: string) => {
+	return new Date(date).toLocaleString('en-GB', {
+		hour12: false,
+	});
+};
+
+export const createSlug = (value: string) => {
+	return value
+		.trim() // remove whitespaces at the start and end of string
+		.toLowerCase()
+		.replace(/^-+/g, '') // remove one or more dash at the start of the string
+		.replace(/[^\w-]+/g, '-') // convert any on-alphanumeric character to a dash
+		.replace(/-+/g, '-') // convert consecutive dashes to singular one
+		.replace(/-+$/g, ''); // remove one or more dash at the end of the string
+};
+
+const regex = {
+	title: /^#\s+.+/,
+	heading: /^#+\s+.+/,
+};
+
+const isTitle = (str: string) => regex.title.test(str);
+const isHeading = (str: string) => regex.heading.test(str);
+
+export const getMdTitle = (md: string) => {
+	const tokens = md.split('\n');
+
+	for (let i = 0; i < tokens.length; i++) {
+		if (isTitle(tokens[i])) return tokens[i];
+	}
+
+	return '';
+};
+
+export const getMdDescription = (md: string) => {
+	const tokens = md.split('\n');
+
+	for (let i = 0; i < tokens.length; i++) {
+		if (isHeading(tokens[i]) || isTitle(tokens[i])) {
+			continue;
+		}
+
+		return tokens[i];
+	}
+
+	return '';
+};

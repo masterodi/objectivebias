@@ -4,10 +4,12 @@ import deleteTag from '@/app/_actions/deleteTag.action';
 import Card from '@/components/card';
 import CardActions from '@/components/card/card-actions';
 import CardBody from '@/components/card/card-body';
+import Dropdown from '@/components/dropdown';
+import DropdownContent from '@/components/dropdown/dropdown-content';
 import { useToast } from '@/components/toast';
 import { Tag } from '@/schemas';
 import { CREATE_TAG_URL, getDate, UPDATE_TAG_URL } from '@/utils';
-import { Edit, EllipsisVertical, Plus, Trash } from 'lucide-react';
+import { Edit, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { FormEvent, useTransition } from 'react';
 import getTags from '../../_queries/getTags.query';
@@ -37,15 +39,15 @@ export default function ViewTags({ tags }: ViewTagsProps) {
 	);
 }
 
-function NoTags() {
+const NoTags = () => {
 	return (
 		<div className="grid min-h-screen flex-1 place-items-center text-5xl">
 			No tags created so far. Create one and check again.
 		</div>
 	);
-}
+};
 
-function TagsList({ tags }: { tags: Tag[] }) {
+const TagsList = ({ tags }: { tags: Tag[] }) => {
 	return (
 		<div className="grid w-full gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 			{tags.map((tag) => (
@@ -53,9 +55,9 @@ function TagsList({ tags }: { tags: Tag[] }) {
 			))}
 		</div>
 	);
-}
+};
 
-function CardTag({ tag }: { tag: Tag }) {
+const CardTag = ({ tag }: { tag: Tag }) => {
 	return (
 		<Card className="bg-base-200">
 			<CardBody>
@@ -73,9 +75,9 @@ function CardTag({ tag }: { tag: Tag }) {
 			</CardActions>
 		</Card>
 	);
-}
+};
 
-function DropdownTagActions({ tag }: { tag: Tag }) {
+const DropdownTagActions = ({ tag }: { tag: Tag }) => {
 	const [isPending, startTransition] = useTransition();
 	const toast = useToast();
 
@@ -92,35 +94,30 @@ function DropdownTagActions({ tag }: { tag: Tag }) {
 	};
 
 	return (
-		<div className="dropdown">
-			<div
-				tabIndex={0}
-				role="button"
-				className="btn btn-square btn-ghost btn-sm m-1"
-			>
-				<EllipsisVertical />
-			</div>
-			<ul
-				tabIndex={0}
-				className="menu dropdown-content z-[1] w-52 rounded-box bg-base-300 p-2 shadow"
-			>
-				<li>
-					<Link href={UPDATE_TAG_URL(tag.id)} className="flex gap-2">
-						<Edit /> Edit
-					</Link>
-				</li>
-				<li>
-					<form onSubmit={handleDeleteTag}>
-						<button
-							type="submit"
-							disabled={isPending}
+		<Dropdown align="end">
+			<DropdownContent>
+				<ul tabIndex={0} className="menu">
+					<li>
+						<Link
+							href={UPDATE_TAG_URL(tag.id)}
 							className="flex gap-2"
 						>
-							<Trash /> Delete
-						</button>
-					</form>
-				</li>
-			</ul>
-		</div>
+							<Edit /> Edit
+						</Link>
+					</li>
+					<li>
+						<form onSubmit={handleDeleteTag}>
+							<button
+								type="submit"
+								disabled={isPending}
+								className="flex gap-2"
+							>
+								<Trash /> Delete
+							</button>
+						</form>
+					</li>
+				</ul>
+			</DropdownContent>
+		</Dropdown>
 	);
-}
+};

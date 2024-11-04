@@ -1,11 +1,12 @@
-import CardBody from '@/components/card/card-body';
+import MarkdownRender from '@/components/markdown-editor/markdown-render';
 import { Post } from '@/schemas';
+import { getMdDescription } from '@/utils';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 import getPosts from './_queries/getPosts.query';
 
 export default async function Home() {
-	const posts = await getPosts();
+	const posts = await getPosts({ orderBy: 'createdAt', orderDir: 'desc' });
 	const hasPosts = !!posts.length;
 
 	if (!hasPosts) {
@@ -16,27 +17,15 @@ export default async function Home() {
 		);
 	}
 
-	const [first, second, third, fourth, ...rest] = posts;
-	const aside = [second, third, fourth].filter((x) => !!x);
+	const [first, ...rest] = posts.map((post) => ({
+		...post,
+		body: getMdDescription(post.body),
+	}));
 
 	return (
-		<div>
-			<div className="grid gap-4 lg:grid-cols-7 lg:grid-rows-[repeat(3,minmax(0,200px))]">
-				{first && (
-					<CardPost
-						post={first}
-						className="lg:col-span-4 lg:row-span-3"
-					/>
-				)}
-				{aside.map((el) => (
-					<CardPost
-						key={el.id}
-						post={el}
-						className="lg:col-span-3 lg:row-span-1"
-					/>
-				))}
-			</div>
-			<div>
+		<div className="mx-auto max-w-4xl">
+			<div className="grid gap-4 lg:grid-cols-3">
+				{first && <CardPost post={first} className="lg:col-span-3" />}
 				{rest.map((el) => (
 					<CardPost key={el.id} post={el} />
 				))}
@@ -50,7 +39,7 @@ type CardPostProps = {
 	post: Post;
 };
 
-function CardPost({ className, post }: CardPostProps) {
+const CardPost = ({ className, post }: CardPostProps) => {
 	return (
 		<Link
 			href={`/posts/${post.slug}`}
@@ -59,14 +48,16 @@ function CardPost({ className, post }: CardPostProps) {
 				className
 			)}
 		>
-			<CardBody className="max-h-full">
+			<div className="card-body prose">
 				<h2 className="card-title">{post.title}</h2>
-				<div className="card-actions mt-auto justify-end">
-					<button className="btn btn-link btn-primary">
-						Read More
-					</button>
+
+				<div className="line-clamp-3 max-h-40">
+					<MarkdownRender markdown={post.body} />
 				</div>
-			</CardBody>
+			</div>
+			<div className="card-actions mt-auto justify-end">
+				<button className="btn btn-link btn-primary">Read More</button>
+			</div>
 		</Link>
 	);
-}
+};

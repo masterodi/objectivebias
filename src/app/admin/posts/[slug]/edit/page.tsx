@@ -4,7 +4,11 @@ import validateRequest from '@/app/_queries/validateRequest.query';
 import FormUpsertPost from '@/app/admin/_components/form-upsert-post';
 import { redirect } from 'next/navigation';
 
-export default async function EditPost(props: any) {
+type EditPostProps = {
+	params: Promise<{ slug: string }>;
+};
+
+export default async function EditPost(props: EditPostProps) {
 	const params = await props.params;
 	const { session } = await validateRequest();
 

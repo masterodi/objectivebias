@@ -1,14 +1,15 @@
 'use client';
 
+import upsertTag from '@/app/_actions/upsertTag.action';
+import MultiAutocompleteInput from '@/components/autocomplete-input/multi-autocomplete-input';
 import { ACValue } from '@/components/autocomplete-input/types';
 import Input from '@/components/input';
 import MarkdownEditor from '@/components/markdown-editor/editor';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import { Tag } from '@/schemas';
-import { FormEvent, useTransition } from 'react';
+import { ChangeEvent, FormEvent, useTransition } from 'react';
 import upsertPost from '../../_actions/upsertPost.action';
-import SelectTags from './select-tags';
 
 type FormUpsertPostProps = {
 	data: {
@@ -106,3 +107,55 @@ export default function FormUpsertPost({ data }: FormUpsertPostProps) {
 		</form>
 	);
 }
+
+type SelectTagsProps = {
+	tags: Tag[];
+	inputValue: string;
+	onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	value: ACValue<string, true>;
+	onChange: (newValue: ACValue<string, true>) => void;
+	error?: string | string[];
+};
+
+const SelectTags = ({
+	tags,
+	inputValue,
+	onInputChange,
+	value,
+	onChange,
+	error,
+}: SelectTagsProps) => {
+	const [, startTransition] = useTransition();
+	const toast = useToast();
+
+	const handleCreateAndAddTag = async () => {
+		const payload = { name: inputValue };
+		startTransition(async () => {
+			const { error, success, data } = await upsertTag({ payload });
+
+			if (error) {
+				toast.error(error);
+			} else if (success) {
+				toast.success('Tag created and added');
+				onChange([...value, { label: data.name, value: data.id }]);
+			}
+		});
+	};
+
+	return (
+		<MultiAutocompleteInput
+			label="Choose tags"
+			options={tags.map((tag) => ({ label: tag.name, value: tag.id }))}
+			inputValue={inputValue}
+			onInputChange={onInputChange}
+			value={value}
+			onChange={onChange}
+			error={error}
+			whenEmpty={
+				<button type="button" onClick={handleCreateAndAddTag}>
+					+ Create and add tag
+				</button>
+			}
+		/>
+	);
+};

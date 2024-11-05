@@ -1,7 +1,5 @@
-'use client';
-
 import { ChangeEvent, useEffect, useRef } from 'react';
-import MarkdownRender from './markdown-render';
+import MarkdownRenderer from './markdown-renderer';
 
 type EditorProps = {
 	value?: string;
@@ -15,6 +13,7 @@ export default function MarkdownEditor({ value, onChange }: EditorProps) {
 		const textarea = textareaRef.current!;
 		textarea.style.height = textarea.scrollHeight + 'px';
 		textarea.style.overflowY = 'hidden';
+
 		const resize = () => {
 			textarea.style.height = 'auto';
 			textarea.style.height = textarea.scrollHeight + 'px';
@@ -36,7 +35,7 @@ export default function MarkdownEditor({ value, onChange }: EditorProps) {
 				className="textarea textarea-bordered textarea-md"
 			/>
 			<div className="prose">
-				<MarkdownRender markdown={value} />
+				<MarkdownRenderer markdown={value} />
 			</div>
 		</div>
 	);

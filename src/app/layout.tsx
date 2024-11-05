@@ -1,3 +1,4 @@
+import Container from '@/components/container';
 import type { Metadata } from 'next';
 import Footer from './_components/footer';
 import Navbar from './_components/navbar';
@@ -18,7 +19,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<body className="layout font-sans">
 				<Providers>
 					<Navbar />
-					<main className="container mx-auto p-4">{children}</main>
+					<Container className="p-4">{children}</Container>
 					<Footer />
 				</Providers>
 			</body>

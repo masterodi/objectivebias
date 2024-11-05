@@ -1,6 +1,6 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
 import Badge from '@/components/badge';
-import MarkdownRender from '@/components/markdown-editor/markdown-render';
+import MarkdownRenderer from '@/components/markdown-renderer';
 
 type PostProps = {
 	params: Promise<{ slug: string }>;
@@ -38,7 +38,7 @@ export default async function Post(props: PostProps) {
 			</header>
 
 			<section className="prose">
-				<MarkdownRender markdown={post.body} />
+				<MarkdownRenderer markdown={post.body} />
 			</section>
 
 			<div className="divider" />

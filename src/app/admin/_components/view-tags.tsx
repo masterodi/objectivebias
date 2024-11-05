@@ -1,18 +1,16 @@
 'use client';
 
 import deleteTag from '@/app/_actions/deleteTag.action';
-import Card from '@/components/card';
-import CardActions from '@/components/card/card-actions';
-import CardBody from '@/components/card/card-body';
+import getTags from '@/app/_queries/getTags.query';
 import Dropdown from '@/components/dropdown';
 import DropdownContent from '@/components/dropdown/dropdown-content';
+import DropdownToggler from '@/components/dropdown/dropdown-toggler';
 import { useToast } from '@/components/toast';
 import { Tag } from '@/schemas';
 import { CREATE_TAG_URL, getDate, UPDATE_TAG_URL } from '@/utils';
 import { Edit, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { FormEvent, useTransition } from 'react';
-import getTags from '../../_queries/getTags.query';
 
 type ViewTagsProps = {
 	tags: Awaited<ReturnType<typeof getTags>>;
@@ -59,8 +57,8 @@ const TagsList = ({ tags }: { tags: Tag[] }) => {
 
 const CardTag = ({ tag }: { tag: Tag }) => {
 	return (
-		<Card className="bg-base-200">
-			<CardBody>
+		<div className="card bg-base-200">
+			<div className="card-body">
 				<div className="flex justify-between gap-2">
 					<h4 className="font-bold">Name</h4>
 					<span>{tag.name}</span>
@@ -69,11 +67,11 @@ const CardTag = ({ tag }: { tag: Tag }) => {
 					<h4 className="font-bold">Created At</h4>
 					<span>{getDate(tag.createdAt)}</span>
 				</div>
-			</CardBody>
-			<CardActions end className="p-1">
+			</div>
+			<div className="card-actions justify-end p-1">
 				<DropdownTagActions tag={tag} />
-			</CardActions>
-		</Card>
+			</div>
+		</div>
 	);
 };
 
@@ -95,6 +93,7 @@ const DropdownTagActions = ({ tag }: { tag: Tag }) => {
 
 	return (
 		<Dropdown align="end">
+			<DropdownToggler />
 			<DropdownContent>
 				<ul tabIndex={0} className="menu">
 					<li>

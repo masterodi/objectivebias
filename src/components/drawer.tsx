@@ -1,20 +1,19 @@
 import { ReactNode } from 'react';
 
 type DrawerProps = {
+	children: ReactNode;
 	toggler?: ReactNode;
 	id: string;
-	children: ReactNode;
 };
 
-export default function Drawer({ toggler, id, children }: DrawerProps) {
+export default function Drawer({ children, toggler, id }: DrawerProps) {
 	return (
 		<div className="drawer drawer-end w-auto">
 			<input id={id} type="checkbox" className="drawer-toggle" />
 			<div className="drawer-content">
 				<label htmlFor={id} aria-label="open sidebar">
-					{!!toggler ?
-						toggler
-					:	<span className="btn btn-square btn-ghost">
+					{toggler ?? (
+						<span className="btn btn-square btn-ghost">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
@@ -29,7 +28,7 @@ export default function Drawer({ toggler, id, children }: DrawerProps) {
 								></path>
 							</svg>
 						</span>
-					}
+					)}
 				</label>
 			</div>
 

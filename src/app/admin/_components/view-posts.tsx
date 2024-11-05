@@ -2,18 +2,17 @@
 
 import deletePost from '@/app/_actions/deletePost.action';
 import Badge from '@/components/badge';
-import Card from '@/components/card';
-import CardActions from '@/components/card/card-actions';
-import CardBody from '@/components/card/card-body';
 import Drawer from '@/components/drawer';
 import Dropdown from '@/components/dropdown';
 import DropdownContent from '@/components/dropdown/dropdown-content';
-import Select from '@/components/select';
+import DropdownToggler from '@/components/dropdown/dropdown-toggler';
+import SelectField from '@/components/fields/select-field';
 import { useToast } from '@/components/toast';
 import useFilters from '@/hooks/useFilters';
 import useOrderBy from '@/hooks/useOrderBy';
-import { Post, Tag, User } from '@/schemas';
+import { Post, Tag } from '@/schemas';
 import { getDate } from '@/utils';
+import { User } from 'lucia';
 import { Edit, Settings2, Trash, View } from 'lucide-react';
 import Link from 'next/link';
 import { ChangeEvent, FormEvent, useTransition } from 'react';
@@ -57,8 +56,8 @@ const PostsList = ({ posts }: { posts: ViewPostsProps['posts'] }) => {
 
 const CardPost = ({ post }: { post: Post & { tags: Tag[]; user: User } }) => {
 	return (
-		<Card className="bg-base-200">
-			<CardBody>
+		<div className="card bg-base-200">
+			<div className="card-body">
 				<div className="flex justify-between gap-2">
 					<h4 className="font-bold">Title</h4>
 					<span>{post.title}</span>
@@ -83,11 +82,11 @@ const CardPost = ({ post }: { post: Post & { tags: Tag[]; user: User } }) => {
 					<h4 className="font-bold">Updated At</h4>
 					<span>{getDate(post.updatedAt)}</span>
 				</div>
-			</CardBody>
-			<CardActions end className="p-1">
+			</div>
+			<div className="card-actions justify-end p-1">
 				<DropdownPostActions post={post} />
-			</CardActions>
-		</Card>
+			</div>
+		</div>
 	);
 };
 
@@ -114,6 +113,7 @@ const DropdownPostActions = ({
 
 	return (
 		<Dropdown align="end">
+			<DropdownToggler />
 			<DropdownContent>
 				<ul tabIndex={0} className="menu">
 					<li>
@@ -197,7 +197,7 @@ const DrawerPostsFilters = ({ tags }: DrawerPostsFiltersProps) => {
 			<div className="flex flex-col gap-2 px-8 pt-4">
 				<div>
 					<h4 className="mb-1 font-semibold">Order by</h4>
-					<Select
+					<SelectField
 						value={orderBy.toValue()}
 						options={orderByOptions}
 						onChange={updateOrderBy}

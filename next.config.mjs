@@ -3,7 +3,7 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	serverExternalPackages: ['@node-rs/argon2'],
+	serverExternalPackages: ['clsx', '@node-rs/argon2'],
 };
 
 export default nextConfig;

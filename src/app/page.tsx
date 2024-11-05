@@ -1,8 +1,7 @@
-import MarkdownRender from '@/components/markdown-editor/markdown-render';
+import MarkdownRenderer from '@/components/markdown-renderer';
 import { Post } from '@/schemas';
-import { getMdDescription } from '@/utils';
+import { cn, getMdDescription } from '@/utils';
 import Link from 'next/link';
-import { twMerge } from 'tailwind-merge';
 import getPosts from './_queries/getPosts.query';
 
 export default async function Home() {
@@ -34,28 +33,25 @@ export default async function Home() {
 	);
 }
 
-type CardPostProps = {
-	className?: string;
-	post: Post;
-};
-
-const CardPost = ({ className, post }: CardPostProps) => {
+const CardPost = ({ post, className }: { post: Post; className?: string }) => {
 	return (
 		<Link
 			href={`/posts/${post.slug}`}
-			className={twMerge(
-				'card max-h-full border border-transparent bg-base-200 hover:border-primary',
+			className={cn(
+				'card border border-transparent bg-base-200 hover:border-primary',
 				className
 			)}
 		>
 			<div className="card-body prose">
-				<h2 className="card-title">{post.title}</h2>
+				<header className="card-title">
+					<h2>{post.title}</h2>
+				</header>
 
 				<div className="line-clamp-3 max-h-40">
-					<MarkdownRender markdown={post.body} />
+					<MarkdownRenderer markdown={post.body} />
 				</div>
 			</div>
-			<div className="card-actions mt-auto justify-end">
+			<div className="card-actions justify-end">
 				<button className="btn btn-link btn-primary">Read More</button>
 			</div>
 		</Link>

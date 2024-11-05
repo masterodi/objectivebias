@@ -1,13 +1,13 @@
 'use client';
 
-import Input from '@/components/input';
+import upsertTag from '@/app/_actions/upsertTag.action';
+import Dialog from '@/components/dialog';
+import InputField from '@/components/fields/input-field';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import useUpsertTag from '@/hooks/useUpsertTag';
 import { Tag } from '@/schemas';
 import { FormEvent, useTransition } from 'react';
-import { twMerge } from 'tailwind-merge';
-import upsertTag from '../../_actions/upsertTag.action';
 
 type FormUpsertTagProps = {
 	data?: Tag;
@@ -42,51 +42,35 @@ export default function FormUpsertTag({ data }: FormUpsertTagProps) {
 	};
 
 	return (
-		<dialog
-			id="upsert-tag-dialog"
-			className={twMerge('modal', isActive && 'modal-open')}
-			open={isActive}
-		>
-			<div className="modal-box">
-				<form
-					onSubmit={handleUpsertTag}
-					className="grid w-full max-w-xl gap-8"
-				>
-					<h1 className="text-3xl font-bold">
-						{isUpdate ? 'Update tag' : 'Create tag'}
-					</h1>
-					<Input
-						id="name"
-						name="name"
-						label="Tag name"
-						value={fields.name}
-						onChange={(e) =>
-							setFields((prev) => ({
-								...prev,
-								name: e.target.value,
-							}))
-						}
-						error={fieldsError?.name}
-					/>
-					<button
-						type="submit"
-						disabled={isPending}
-						className="btn btn-primary"
-					>
-						{isUpdate ? 'Update Tag' : 'Create Tag'}
-					</button>
-				</form>
-			</div>
+		<Dialog id="upsert-tag-dialog" open={isActive} onClose={closeDialog}>
 			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					closeDialog();
-				}}
-				method="dialog"
-				className="modal-backdrop"
+				onSubmit={handleUpsertTag}
+				className="grid w-full max-w-xl gap-8"
 			>
-				<button>close</button>
+				<h1 className="text-3xl font-bold">
+					{isUpdate ? 'Update tag' : 'Create tag'}
+				</h1>
+				<InputField
+					id="name"
+					name="name"
+					label="Tag name"
+					value={fields.name}
+					onChange={(e) =>
+						setFields((prev) => ({
+							...prev,
+							name: e.target.value,
+						}))
+					}
+					error={fieldsError?.name}
+				/>
+				<button
+					type="submit"
+					disabled={isPending}
+					className="btn btn-primary"
+				>
+					{isUpdate ? 'Update Tag' : 'Create Tag'}
+				</button>
 			</form>
-		</dialog>
+		</Dialog>
 	);
 }

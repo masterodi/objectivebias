@@ -22,8 +22,9 @@ function GuestNavbar() {
 			</div>
 
 			<div className="navbar-end gap-4">
-				<Link href="/register" className="btn btn-ghost">
-					Get Started <ArrowRight />
+				<Link href="/register" className="group btn btn-ghost">
+					Get Started{' '}
+					<ArrowRight className="transition-all duration-200 ease-in-out group-hover:translate-x-[2px]" />
 				</Link>
 			</div>
 		</nav>
@@ -39,7 +40,7 @@ async function UserNavbar({ user }: { user: User }) {
 				</Link>
 			</div>
 			<div className="navbar-end gap-4">
-				<span>{user.username}</span>
+				<span className="hidden md:inline-block">{user.username}</span>
 				<NavDrawer user={user} />
 			</div>
 		</nav>
@@ -59,16 +60,16 @@ function NavDrawer({ user }: { user: User }) {
 							View Posts
 						</Link>
 						<Link
-							href="/admin/dashboard?view=tags"
-							className="btn btn-ghost"
-						>
-							View Tags
-						</Link>
-						<Link
 							href="/admin/posts/create"
 							className="btn btn-ghost"
 						>
 							Create a new post
+						</Link>
+						<Link
+							href="/admin/dashboard?view=tags"
+							className="btn btn-ghost"
+						>
+							View Tags
 						</Link>
 					</div>
 				)}

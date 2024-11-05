@@ -1,6 +1,6 @@
 'use client';
 
-import Input from '@/components/input';
+import InputField from '@/components/fields/input-field';
 import { useToast } from '@/components/toast';
 import useFormFields from '@/hooks/useFormFields';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ export default function LoginForm() {
 			className="flex w-full flex-col gap-8 rounded-md bg-base-300 p-8 shadow-lg"
 		>
 			<h1 className="text-3xl font-bold">Enter account</h1>
-			<Input
+			<InputField
 				type="text"
 				name="username"
 				id="username"
@@ -47,7 +47,7 @@ export default function LoginForm() {
 				onChange={handleFieldChange}
 				error={fieldsError?.username}
 			/>
-			<Input
+			<InputField
 				type="password"
 				name="password"
 				id="password"

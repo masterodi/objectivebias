@@ -1,20 +1,20 @@
+import { cn } from '@/utils';
 import { ReactNode } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 type DropdownContentProps = {
-	className?: string;
 	children: ReactNode;
+	className?: string;
 };
 
 export default function DropdownContent({
-	className,
 	children,
+	className,
 }: DropdownContentProps) {
 	return (
 		<div
 			tabIndex={0}
-			className={twMerge(
-				'dropdown-content z-[1] w-52 rounded-box bg-base-300 p-2 shadow',
+			className={cn(
+				'dropdown-content z-[1] rounded-md bg-base-300',
 				className
 			)}
 		>

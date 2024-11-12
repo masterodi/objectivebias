@@ -1,28 +1,54 @@
 'use client';
 
 import deleteTag from '@/app/_actions/deleteTag.action';
-import getTags from '@/app/_queries/getTags.query';
 import Dropdown from '@/components/dropdown';
 import DropdownContent from '@/components/dropdown/dropdown-content';
 import DropdownToggler from '@/components/dropdown/dropdown-toggler';
+import InputField from '@/components/fields/input-field';
 import { useToast } from '@/components/toast';
-import { Tag } from '@/schemas';
+import { Tag } from '@/types';
 import { CREATE_TAG_URL, getDate, UPDATE_TAG_URL } from '@/utils';
-import { Edit, Plus, Trash } from 'lucide-react';
+import { Edit, Plus, SearchIcon, Trash } from 'lucide-react';
 import Link from 'next/link';
-import { FormEvent, useTransition } from 'react';
+import { useQueryState } from 'nuqs';
+import { FormEvent, useMemo, useTransition } from 'react';
 
-type ViewTagsProps = {
-	tags: Awaited<ReturnType<typeof getTags>>;
+type TagsViewProps = {
+	data: {
+		tags: Tag[];
+	};
 };
 
-export default function ViewTags({ tags }: ViewTagsProps) {
-	const hasTags = !!tags.length;
+export default function TagsView({ data }: TagsViewProps) {
+	const { tags } = data;
+	const [searchValue, setSearchValue] = useQueryState('search', {
+		defaultValue: '',
+	});
+	const searchedTags = useMemo(
+		() =>
+			tags.filter((tag) =>
+				tag.name
+					.trim()
+					.toLowerCase()
+					.includes(searchValue.trim().toLowerCase())
+			),
+		[searchValue, tags]
+	);
+	const areTags = useMemo(() => !!searchedTags.length, [searchedTags]);
 
 	return (
-		<div>
-			{hasTags ?
-				<TagsList tags={tags} />
+		<div className="flex flex-col gap-4">
+			<div>
+				<InputField
+					rightContent={<SearchIcon />}
+					placeholder="Search..."
+					value={searchValue ?? ''}
+					onChange={(e) => setSearchValue(e.target.value)}
+				/>
+			</div>
+
+			{areTags ?
+				<TagsList tags={searchedTags} />
 			:	<NoTags />}
 
 			<div className="toast">

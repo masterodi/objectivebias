@@ -1,21 +1,18 @@
 'use server';
 
 import db, { posts, tagsToPosts } from '@/db';
-import {
-	CreatePostPayload,
-	CreatePostPayloadSchema,
-	InsertPost,
-	validate,
-} from '@/schemas';
+import { PostCreatePayloadSchema, validate } from '@/schemas';
+import { PostCreatePayload, PostInsert } from '@/types';
 import { createSlug } from '@/utils';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import getPostBySlug from '../_queries/getPostBySlug.query';
 import validateRequest from '../_queries/validateRequest.query';
 
-type UpsertProps = { id?: string; payload: CreatePostPayload };
-
-export default async function upsertPost(props: UpsertProps) {
+const upsertPost = async (props: {
+	id?: string;
+	payload: PostCreatePayload;
+}) => {
 	const { session, user } = await validateRequest();
 	if (!session || user.role !== 'moderator') {
 		return { error: 'Unauthorized' };
@@ -23,7 +20,7 @@ export default async function upsertPost(props: UpsertProps) {
 
 	const { id, payload } = props;
 
-	const { data, error } = await validate(payload, CreatePostPayloadSchema);
+	const { data, error } = await validate(payload, PostCreatePayloadSchema);
 	if (error) {
 		return { validationError: error.toJson() };
 	}
@@ -44,7 +41,7 @@ export default async function upsertPost(props: UpsertProps) {
 		body,
 		slug,
 		createdBy: user.id,
-	} satisfies InsertPost;
+	} satisfies PostInsert;
 	const upsertPostResult = await db
 		.insert(posts)
 		.values({ id, ...upsertPostData })
@@ -54,10 +51,12 @@ export default async function upsertPost(props: UpsertProps) {
 	if (tags) {
 		const { id: upsertId } = upsertPostResult[0];
 		await db.delete(tagsToPosts).where(eq(tagsToPosts.postId, upsertId));
-		const updatePostTagsResult = await db
+		await db
 			.insert(tagsToPosts)
 			.values(tags.map((tagId) => ({ postId: upsertId, tagId })));
 	}
 
 	return redirect('/admin/dashboard?view=posts');
-}
+};
+
+export default upsertPost;

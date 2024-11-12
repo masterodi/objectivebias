@@ -1,34 +1,35 @@
 'use client';
 
+import Button from '@/components/button';
 import InputField from '@/components/fields/input-field';
 import { useToast } from '@/components/toast';
-import useFormFields from '@/hooks/useFormFields';
+import useChangeEventHandler from '@/hooks/useChangeEventHandler';
+import useFields from '@/hooks/useFields';
 import Link from 'next/link';
-import { ChangeEvent, FormEvent, useTransition } from 'react';
-import register from '../_actions/register.action';
+import { FormEventHandler, useTransition } from 'react';
+import { register } from '../_actions/register.action';
 
 export default function RegisterForm() {
-	const [isPending, startTransition] = useTransition();
-	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
+	const { fields, setFields, errors, setErrors } = useFields({
 		email: '',
 		username: '',
 		password: '',
 		passwordConfirm: '',
 	});
+	const [isPending, startTransition] = useTransition();
 	const toast = useToast();
 
-	const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-	};
+	const handleFieldChange = useChangeEventHandler(setFields);
 
-	const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
+	const handleRegister: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		setFieldsError(null);
+
 		startTransition(async () => {
-			const { validationError, error } = await register(fields);
-			if (validationError) {
-				setFieldsError(validationError.details);
-			} else if (error) {
+			const { error, validationError } = await register(fields);
+
+			setErrors(validationError?.details);
+
+			if (error) {
 				toast.error(error);
 			}
 		});
@@ -41,22 +42,20 @@ export default function RegisterForm() {
 		>
 			<h1 className="text-3xl font-bold">Create account</h1>
 			<InputField
-				type="text"
 				name="email"
 				id="email"
 				label="Email"
 				value={fields.email}
 				onChange={handleFieldChange}
-				error={fieldsError?.email}
+				error={errors?.email}
 			/>
 			<InputField
-				type="text"
 				name="username"
 				id="username"
 				label="Username"
 				value={fields.username}
 				onChange={handleFieldChange}
-				error={fieldsError?.username}
+				error={errors?.username}
 			/>
 			<InputField
 				type="password"
@@ -65,7 +64,7 @@ export default function RegisterForm() {
 				label="Password"
 				value={fields.password}
 				onChange={handleFieldChange}
-				error={fieldsError?.password}
+				error={errors?.password}
 			/>
 			<InputField
 				type="password"
@@ -74,15 +73,11 @@ export default function RegisterForm() {
 				label="Confirm Password"
 				value={fields.passwordConfirm}
 				onChange={handleFieldChange}
-				error={fieldsError?.passwordConfirm}
+				error={errors?.passwordConfirm}
 			/>
-			<button
-				type="submit"
-				disabled={isPending}
-				className="btn btn-primary"
-			>
-				{isPending ? 'Please wait...' : 'Register'}
-			</button>
+			<Button type="submit" variant="accent" loading={isPending}>
+				Register
+			</Button>
 			<Link href="/login" className="btn btn-ghost">
 				I already have an account
 			</Link>

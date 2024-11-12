@@ -10,15 +10,28 @@ export const ORDER_BY_NAME = 'order-by';
 
 export const TAG_FILTER_NAME = 'tag';
 
-export const UPSERT_TAG_NAME = 'upsert-tag';
+export const UPSERT_NAME = 'upsert';
 export const UPSERT_ID_NAME = 'upsert-id';
 
 export const DASHBOARD_POSTS_VIEW_URL = '/admin/dashboard?view=posts';
 export const DASHBOARD_TAGS_VIEW_URL = '/admin/dashboard?view=tags';
 
-export const CREATE_TAG_URL = `/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true`;
+export const CREATE_TAG_URL = `/admin/dashboard?view=tags&${UPSERT_NAME}=true`;
 export const UPDATE_TAG_URL = (tagId: string) =>
-	`/admin/dashboard?view=tags&${UPSERT_TAG_NAME}=true&${UPSERT_ID_NAME}=${tagId}`;
+	`/admin/dashboard?view=tags&${UPSERT_NAME}=true&${UPSERT_ID_NAME}=${tagId}`;
+
+export const ORDER_OPTIONS = [
+	{ label: 'Title', value: 'title:asc' },
+	{ label: 'Title DESC', value: 'title:desc' },
+	{ label: 'Slug', value: 'slug:asc' },
+	{ label: 'Slug DESC', value: 'slug:desc' },
+	{ label: 'Created By', value: 'createdBy:asc' },
+	{ label: 'Created By DESC', value: 'createdBy:desc' },
+	{ label: 'Created At', value: 'createdAt:asc' },
+	{ label: 'Created At DESC', value: 'createdAt:desc' },
+	{ label: 'Updated At', value: 'updatedAt:asc' },
+	{ label: 'Updated At DESC', value: 'updatedAt:desc' },
+];
 
 export const cn = (...classNames: ClassValue[]) => {
 	return twMerge(clsx(classNames));

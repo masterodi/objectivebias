@@ -2,14 +2,15 @@
 
 import db, { users } from '@/db';
 import { lucia } from '@/lucia';
-import { RegisterPayload, RegisterPayloadSchema, validate } from '@/schemas';
+import { RegisterPayloadSchema, validate } from '@/schemas';
+import { RegisterPayload } from '@/types';
 import { hash } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import getUserByEmail from '../_queries/getUserByEmail.query';
 import getUserByUsername from '../_queries/getUserByUsername.query';
 
-export default async function register(payload: RegisterPayload) {
+export async function register(payload: RegisterPayload) {
 	const { data, error } = await validate(payload, RegisterPayloadSchema);
 
 	if (error) {

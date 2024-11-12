@@ -1,7 +1,8 @@
 'use server';
 
 import { lucia } from '@/lucia';
-import { LoginPayload, LoginPayloadSchema, validate } from '@/schemas';
+import { LoginPayloadSchema, validate } from '@/schemas';
+import { LoginPayload } from '@/types';
 import { verify } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';

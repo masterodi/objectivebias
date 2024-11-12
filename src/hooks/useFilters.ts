@@ -1,49 +1,33 @@
-import { TAG_FILTER_NAME } from '@/utils';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { postsFiltersParsers, postsFiltersUrlKeys } from '@/searchParams';
+import { useQueryStates } from 'nuqs';
 
 const useFilters = () => {
-	const router = useRouter();
-	const pathname = usePathname();
-	const sps = useSearchParams();
+	const [filters, setFilters] = useQueryStates(postsFiltersParsers, {
+		shallow: false,
+		history: 'push',
+		clearOnDefault: false,
+		urlKeys: postsFiltersUrlKeys,
+	});
 
-	const getValue =
-		(name: string) =>
-		(all: boolean = false) => {
-			return all ? sps.getAll(name) : sps.get(name);
-		};
+	const updateTag = (value: string, op: 'append' | 'remove') => {
+		setFilters((prev) => {
+			const newTag =
+				op === 'remove' ?
+					(prev.tag ?? []).filter((tag) => tag !== value)
+				:	[...(prev.tag ?? []), value];
 
-	const pushUpdate =
-		(name: string) =>
-		(
-			value?: string,
-			{ action }: { action: 'set' | 'append' | 'remove' } = {
-				action: 'set',
-			}
-		) => {
-			const newSps = new URLSearchParams(sps);
+			return { ...prev, tag: newTag.length > 0 ? newTag : null };
+		});
+	};
 
-			if (value) {
-				if (action === 'set') {
-					newSps.set(name, value);
-				} else if (action === 'append') {
-					newSps.append(name, value);
-				} else if (action === 'remove') {
-					newSps.delete(name, value);
-				}
-			} else {
-				newSps.delete(name);
-			}
-
-			const url = `${pathname}?${newSps}`;
-			return router.push(url);
-		};
+	const isTagInFilter = (value: string) => {
+		return !!filters.tag?.find((tg) => tg === value);
+	};
 
 	return {
-		tagFilter: {
-			getValue: getValue(TAG_FILTER_NAME),
-			pushUpdate: pushUpdate(TAG_FILTER_NAME),
-			hasTag: (tag: string) => sps.has(TAG_FILTER_NAME, tag),
-		},
+		value: filters,
+		updateTag,
+		isTagInFilter,
 	};
 };
 

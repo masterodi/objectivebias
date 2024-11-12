@@ -1,7 +1,7 @@
 import getPostBySlug from '@/app/_queries/getPostBySlug.query';
 import getTags from '@/app/_queries/getTags.query';
 import validateRequest from '@/app/_queries/validateRequest.query';
-import FormUpsertPost from '@/app/admin/_components/form-upsert-post';
+import FormUpsertPost from '@/app/admin/_components/post-upsert-form';
 import { redirect } from 'next/navigation';
 
 type EditPostProps = {
@@ -28,7 +28,10 @@ export default async function EditPost(props: EditPostProps) {
 		body: post.body,
 		tags: post.tags.map((tag) => ({ label: tag.name, value: tag.id })),
 	};
-	const tags = await getTags();
+	const tags = (await getTags()).map((tag) => ({
+		label: tag.name,
+		value: tag.id,
+	}));
 
 	return (
 		<div className="grid min-h-screen place-items-center">

@@ -1,32 +1,33 @@
 'use client';
 
+import Button from '@/components/button';
 import InputField from '@/components/fields/input-field';
 import { useToast } from '@/components/toast';
-import useFormFields from '@/hooks/useFormFields';
+import useChangeEventHandler from '@/hooks/useChangeEventHandler';
+import useFields from '@/hooks/useFields';
 import Link from 'next/link';
-import { ChangeEvent, FormEvent, useTransition } from 'react';
+import { FormEventHandler, useTransition } from 'react';
 import login from '../_actions/login.action';
 
 export default function LoginForm() {
-	const [isPending, startTransition] = useTransition();
-	const { fields, setFields, fieldsError, setFieldsError } = useFormFields({
+	const { fields, setFields, errors, setErrors } = useFields({
 		username: '',
 		password: '',
 	});
+	const [isPending, startTransition] = useTransition();
 	const toast = useToast();
 
-	const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-	};
+	const handleFieldChange = useChangeEventHandler(setFields);
 
-	const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+	const handleLogin: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		setFieldsError(null);
+
 		startTransition(async () => {
 			const { validationError, error } = await login(fields);
-			if (validationError) {
-				setFieldsError(validationError.details);
-			} else if (error) {
+
+			setErrors(validationError?.details);
+
+			if (error) {
 				toast.error(error);
 			}
 		});
@@ -39,13 +40,12 @@ export default function LoginForm() {
 		>
 			<h1 className="text-3xl font-bold">Enter account</h1>
 			<InputField
-				type="text"
 				name="username"
 				id="username"
 				label="Username"
 				value={fields.username}
 				onChange={handleFieldChange}
-				error={fieldsError?.username}
+				error={errors?.username}
 			/>
 			<InputField
 				type="password"
@@ -54,15 +54,11 @@ export default function LoginForm() {
 				label="Password"
 				value={fields.password}
 				onChange={handleFieldChange}
-				error={fieldsError?.password}
+				error={errors?.password}
 			/>
-			<button
-				type="submit"
-				disabled={isPending}
-				className="btn btn-primary"
-			>
-				{isPending ? 'Please wait...' : 'Log In'}
-			</button>
+			<Button type="submit" variant="primary" loading={isPending}>
+				Log In
+			</Button>
 			<Link href="/register" className="btn btn-neutral">
 				I want to create an account
 			</Link>

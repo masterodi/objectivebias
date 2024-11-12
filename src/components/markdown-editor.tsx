@@ -2,11 +2,12 @@ import { ChangeEvent, useEffect, useRef } from 'react';
 import MarkdownRenderer from './markdown-renderer';
 
 type EditorProps = {
+	name?: string;
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
-export default function MarkdownEditor({ value, onChange }: EditorProps) {
+export default function MarkdownEditor({ name, value, onChange }: EditorProps) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
@@ -30,6 +31,7 @@ export default function MarkdownEditor({ value, onChange }: EditorProps) {
 			<textarea
 				ref={textareaRef}
 				placeholder="Start typing something..."
+				name={name}
 				value={value}
 				onChange={onChange}
 				className="textarea textarea-bordered textarea-md"

@@ -1,20 +1,14 @@
 'use server';
 
 import db, { tags } from '@/db';
-import {
-	CreateTagPayload,
-	CreateTagPayloadSchema,
-	InsertTag,
-	validate,
-} from '@/schemas';
+import { TagCreatePayloadSchema, validate } from '@/schemas';
+import { TagCreatePayload, TagInsert } from '@/types';
 import { createSlug } from '@/utils';
 import { revalidatePath } from 'next/cache';
 import getTagBySlug from '../_queries/getTagBySlug.query';
 import validateRequest from '../_queries/validateRequest.query';
 
-type UpsertTagProps = { id?: string; payload: CreateTagPayload };
-
-export default async function upsertTag(props: UpsertTagProps) {
+const upsertTag = async (props: { id?: string; payload: TagCreatePayload }) => {
 	const { session, user } = await validateRequest();
 	if (!session || user.role !== 'moderator') {
 		return { error: 'Unauthorized' };
@@ -22,7 +16,7 @@ export default async function upsertTag(props: UpsertTagProps) {
 
 	const { id, payload } = props;
 
-	const { data, error } = await validate(payload, CreateTagPayloadSchema);
+	const { data, error } = await validate(payload, TagCreatePayloadSchema);
 	if (error) {
 		return { validationError: error.toJson() };
 	}
@@ -42,7 +36,7 @@ export default async function upsertTag(props: UpsertTagProps) {
 		name,
 		slug,
 		createdBy: user.id,
-	} satisfies InsertTag;
+	} satisfies TagInsert;
 	const upsertTagResult = await db
 		.insert(tags)
 		.values({ id, ...upsertTagData })
@@ -51,4 +45,6 @@ export default async function upsertTag(props: UpsertTagProps) {
 
 	revalidatePath('/admin/dashboard?view=tags');
 	return { success: true, data: upsertTagResult[0] };
-}
+};
+
+export default upsertTag;

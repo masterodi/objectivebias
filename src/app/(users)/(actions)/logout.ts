@@ -3,7 +3,7 @@
 import { lucia } from '@/lucia';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import validateRequest from '../_queries/validateRequest.query';
+import validateRequest from '../(queries)/validateRequest';
 
 export default async function logout() {
 	const { session } = await validateRequest();

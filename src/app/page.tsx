@@ -1,8 +1,11 @@
+import Center from '@/components/center';
 import MarkdownRenderer from '@/components/markdown-renderer';
-import { Post } from '@/schemas';
+import { Post } from '@/types';
 import { cn, getMdDescription } from '@/utils';
 import Link from 'next/link';
-import getPosts from './_queries/getPosts.query';
+import getPosts from './(posts)/(queries)/getPosts';
+
+type PostItemProps = { post: Post; className?: string };
 
 export default async function Home() {
 	const posts = await getPosts({ orderBy: 'createdAt', orderDir: 'desc' });
@@ -10,9 +13,9 @@ export default async function Home() {
 
 	if (!hasPosts) {
 		return (
-			<div className="grid min-h-screen place-items-center text-5xl">
-				No post available yet. Come back later.
-			</div>
+			<Center>
+				<h1>No post available yet. Come back later.</h1>
+			</Center>
 		);
 	}
 
@@ -24,16 +27,16 @@ export default async function Home() {
 	return (
 		<div className="mx-auto max-w-4xl">
 			<div className="grid gap-4 lg:grid-cols-3">
-				{first && <CardPost post={first} className="lg:col-span-3" />}
+				{first && <PostItem post={first} className="lg:col-span-3" />}
 				{rest.map((el) => (
-					<CardPost key={el.id} post={el} />
+					<PostItem key={el.id} post={el} />
 				))}
 			</div>
 		</div>
 	);
 }
 
-const CardPost = ({ post, className }: { post: Post; className?: string }) => {
+const PostItem = ({ post, className }: PostItemProps) => {
 	return (
 		<Link
 			href={`/posts/${post.slug}`}

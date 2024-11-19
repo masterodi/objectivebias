@@ -1,6 +1,7 @@
+import Center from '@/components/center';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import validateRequest from '../_queries/validateRequest.query';
+import validateRequest from '../(users)/(queries)/validateRequest';
 import RegisterForm from './_register-form';
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export default async function Register() {
 	}
 
 	return (
-		<div className="mx-auto grid min-h-screen max-w-xl place-items-center">
+		<Center>
 			<RegisterForm />
-		</div>
+		</Center>
 	);
 }

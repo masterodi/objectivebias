@@ -1,7 +1,9 @@
-import getPostBySlug from '@/app/_queries/getPostBySlug.query';
-import getTags from '@/app/_queries/getTags.query';
-import validateRequest from '@/app/_queries/validateRequest.query';
-import FormUpsertPost from '@/app/admin/_components/post-upsert-form';
+import getPostBySlug from '@/app/(posts)/(queries)/getPostBySlug';
+import getTags from '@/app/(tags)/(queries)/getTags';
+import PostUpsertForm from '@/app/admin/(posts)/post-upsert-form';
+import Center from '@/components/center';
+import { PostUpsertData } from '@/types';
+import { URLS } from '@/urls';
 import { redirect } from 'next/navigation';
 
 type EditPostProps = {
@@ -10,32 +12,31 @@ type EditPostProps = {
 
 export default async function EditPost(props: EditPostProps) {
 	const params = await props.params;
-	const { session } = await validateRequest();
-
-	if (!session) {
-		return redirect('/login');
-	}
 
 	const post = await getPostBySlug(params.slug);
 
 	if (!post) {
-		return redirect('/admin/dashboard?view=posts');
+		return redirect(URLS.POSTS_VIEW_DASHBOARD);
 	}
 
-	const postData = {
-		id: post.id,
-		title: post.title,
-		body: post.body,
-		tags: post.tags.map((tag) => ({ label: tag.name, value: tag.id })),
-	};
 	const tags = (await getTags()).map((tag) => ({
 		label: tag.name,
 		value: tag.id,
 	}));
 
+	const data: PostUpsertData = {
+		tags,
+		post: {
+			id: post.id,
+			title: post.title,
+			body: post.body,
+			tags: post.tags.map((tag) => ({ label: tag.name, value: tag.id })),
+		},
+	};
+
 	return (
-		<div className="grid min-h-screen place-items-center">
-			<FormUpsertPost data={{ tags, post: postData }} />
-		</div>
+		<Center>
+			<PostUpsertForm data={data} />
+		</Center>
 	);
 }

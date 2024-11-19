@@ -1,7 +1,7 @@
 'use server';
 
 import { cache } from 'react';
-import validateRequest from './validateRequest.query';
+import validateRequest from './validateRequest';
 
 const getUser = cache(async () => {
 	const { user } = await validateRequest();

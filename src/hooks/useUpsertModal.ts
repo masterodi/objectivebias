@@ -2,17 +2,17 @@ import { upsertModalParsers, upsertModalUrlKeys } from '@/searchParams';
 import { useQueryStates } from 'nuqs';
 
 const useUpsertModal = () => {
-	const [upsert, setUpsert] = useQueryStates(upsertModalParsers, {
+	const [upsertModal, setUpsertModal] = useQueryStates(upsertModalParsers, {
 		urlKeys: upsertModalUrlKeys,
 		shallow: false,
 		history: 'push',
 	});
 
 	const close = () => {
-		setUpsert(null);
+		setUpsertModal(null);
 	};
 
-	return { active: !!upsert.active, close };
+	return { isActive: !!upsertModal.upsertActive, close };
 };
 
 export default useUpsertModal;

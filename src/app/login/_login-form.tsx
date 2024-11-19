@@ -7,15 +7,15 @@ import useChangeEventHandler from '@/hooks/useChangeEventHandler';
 import useFields from '@/hooks/useFields';
 import Link from 'next/link';
 import { FormEventHandler, useTransition } from 'react';
-import login from '../_actions/login.action';
+import login from '../(users)/(actions)/login';
 
 export default function LoginForm() {
+	const [isPending, startTransition] = useTransition();
+	const toast = useToast();
 	const { fields, setFields, errors, setErrors } = useFields({
 		username: '',
 		password: '',
 	});
-	const [isPending, startTransition] = useTransition();
-	const toast = useToast();
 
 	const handleFieldChange = useChangeEventHandler(setFields);
 

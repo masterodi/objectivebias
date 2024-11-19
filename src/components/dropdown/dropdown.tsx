@@ -1,5 +1,7 @@
+'use client';
+
 import { cn } from '@/utils';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
 type DropdownProps = {
 	children: ReactNode;
@@ -7,9 +9,30 @@ type DropdownProps = {
 };
 
 export default function Dropdown({ children, align }: DropdownProps) {
+	const dropdownRef = useRef<HTMLDetailsElement>(null);
+
+	useEffect(() => {
+		const dropdownEl = dropdownRef.current!;
+
+		const toggle = (e: MouseEvent) => {
+			if (!dropdownEl.contains(e.target as Node)) {
+				dropdownEl.removeAttribute('open');
+			}
+		};
+
+		document.addEventListener('click', toggle);
+
+		return () => {
+			document.removeEventListener('click', toggle);
+		};
+	}, []);
+
 	return (
-		<div className={cn('dropdown', align === 'end' && 'dropdown-end')}>
+		<details
+			ref={dropdownRef}
+			className={cn('dropdown', align === 'end' && 'dropdown-end')}
+		>
 			{children}
-		</div>
+		</details>
 	);
 }

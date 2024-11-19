@@ -12,8 +12,8 @@ export default function DropdownToggler({
 	className,
 }: DropdownTogglerProps) {
 	return (
-		<button type="button" role="button" className={cn('btn', className)}>
+		<summary className={cn('btn', className)}>
 			{children ?? <Ellipsis />}
-		</button>
+		</summary>
 	);
 }

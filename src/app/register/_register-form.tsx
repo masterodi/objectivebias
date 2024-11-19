@@ -7,17 +7,17 @@ import useChangeEventHandler from '@/hooks/useChangeEventHandler';
 import useFields from '@/hooks/useFields';
 import Link from 'next/link';
 import { FormEventHandler, useTransition } from 'react';
-import { register } from '../_actions/register.action';
+import { register } from '../(users)/(actions)/register';
 
 export default function RegisterForm() {
+	const [isPending, startTransition] = useTransition();
+	const toast = useToast();
 	const { fields, setFields, errors, setErrors } = useFields({
 		email: '',
 		username: '',
 		password: '',
 		passwordConfirm: '',
 	});
-	const [isPending, startTransition] = useTransition();
-	const toast = useToast();
 
 	const handleFieldChange = useChangeEventHandler(setFields);
 

@@ -173,7 +173,7 @@ export function AutocompleteMultipleInputField<T>({
 					role="button"
 					tabIndex={0}
 					className={cn(
-						'input input-bordered flex h-auto min-h-12 flex-wrap items-center gap-2 py-2 focus:bg-blue-500',
+						'input input-bordered flex h-auto min-h-12 flex-wrap items-center gap-2 py-2',
 						error && 'input-error'
 					)}
 				>

@@ -2,8 +2,8 @@ import Drawer from '@/components/drawer';
 import { User } from 'lucia';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import logout from '../_actions/logout.action';
-import getUser from '../_queries/getUser.query';
+import logout from './(users)/(actions)/logout';
+import getUser from './(users)/(queries)/getUser';
 
 const SITE_NAME = 'ObjectiveBias';
 

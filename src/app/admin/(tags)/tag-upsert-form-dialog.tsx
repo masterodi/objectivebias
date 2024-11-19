@@ -1,6 +1,6 @@
 'use client';
 
-import upsertTag from '@/app/_actions/upsertTag.action';
+import upsertTag from '@/app/(tags)/(actions)/upsertTag';
 import Button from '@/components/button';
 import Dialog from '@/components/dialog';
 import InputField from '@/components/fields/input-field';
@@ -14,11 +14,11 @@ import { FormEventHandler, useTransition } from 'react';
 const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 	const { tag } = data ?? {};
 	const isUpdate = !!tag;
-	const upsert = useUpsertModal();
+	const upsertModal = useUpsertModal();
 	const toast = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { fields, setFields, errors, setErrors } = useFields({
-		name: data?.tag?.name ?? '',
+		name: tag?.name ?? '',
 	});
 
 	const handleFieldChange = useChangeEventHandler(setFields);
@@ -26,13 +26,11 @@ const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 	const handleUpsertTag: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
-		const data = {
-			id: tag?.id,
-			payload: fields,
-		};
-
 		startTransition(async () => {
-			const { validationError, error, success } = await upsertTag(data);
+			const { validationError, error, success } = await upsertTag({
+				id: tag?.id,
+				payload: fields,
+			});
 
 			setErrors(validationError?.details);
 
@@ -41,7 +39,7 @@ const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 			}
 
 			if (success) {
-				upsert.close();
+				upsertModal.close();
 				toast.success(isUpdate ? 'Tag updated' : 'Tag created');
 			}
 		});
@@ -50,8 +48,8 @@ const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 	return (
 		<Dialog
 			id="upsert-tag-dialog"
-			open={upsert.active}
-			onClose={upsert.close}
+			open={upsertModal.isActive}
+			onClose={upsertModal.close}
 		>
 			<form
 				onSubmit={handleUpsertTag}

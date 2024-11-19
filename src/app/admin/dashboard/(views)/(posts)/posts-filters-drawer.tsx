@@ -3,14 +3,17 @@
 import Checkbox from '@/components/checkbox';
 import Drawer from '@/components/drawer';
 import SelectField from '@/components/fields/select-field';
-import useFilters from '@/hooks/useFilters';
-import useOrder from '@/hooks/useOrder';
+import usePostsFilters from '@/hooks/usePostsFilters';
+import usePostsOrder from '@/hooks/usePostsOrder';
 import { Tag } from '@/types';
 import { ORDER_OPTIONS } from '@/utils';
 import { Settings2 } from 'lucide-react';
 import { ChangeEventHandler } from 'react';
 
-const PostsFiltersDrawer = ({ tags }: { tags: Tag[] }) => {
+type PostsFilterDrawerProps = { tags: Tag[] };
+type TagFilterSectionProps = { tags: Tag[] };
+
+const PostsFiltersDrawer = ({ tags }: PostsFilterDrawerProps) => {
 	return (
 		<Drawer
 			id="posts-filters-drawer"
@@ -33,7 +36,7 @@ const PostsFiltersDrawer = ({ tags }: { tags: Tag[] }) => {
 };
 
 const PostsOrderSection = () => {
-	const order = useOrder();
+	const order = usePostsOrder();
 
 	const updateOrder: ChangeEventHandler<HTMLSelectElement> = (e) => {
 		order.update(e.target.value);
@@ -51,8 +54,8 @@ const PostsOrderSection = () => {
 	);
 };
 
-const TagFilterSection = ({ tags }: { tags: Tag[] }) => {
-	const filters = useFilters();
+const TagFilterSection = ({ tags }: TagFilterSectionProps) => {
+	const filters = usePostsFilters();
 
 	const updateTagFilter: ChangeEventHandler<HTMLInputElement> = (e) => {
 		const { checked, value } = e.target;

@@ -7,8 +7,8 @@ import { RegisterPayload } from '@/types';
 import { hash } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import getUserByEmail from '../_queries/getUserByEmail.query';
-import getUserByUsername from '../_queries/getUserByUsername.query';
+import getUserByEmail from '../(queries)/getUserByEmail';
+import getUserByUsername from '../(queries)/getUserByUsername';
 
 export async function register(payload: RegisterPayload) {
 	const { data, error } = await validate(payload, RegisterPayloadSchema);

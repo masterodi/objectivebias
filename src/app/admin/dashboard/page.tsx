@@ -1,12 +1,7 @@
-import getPosts from '@/app/_queries/getPosts.query';
-import getTagById from '@/app/_queries/getTagById.query';
-import getTags from '@/app/_queries/getTags.query';
-import { orderCache, postsFiltersCache, upsertTagCache } from '@/searchParams';
-import { PostsOrderBy } from '@/types';
+import { viewCache } from '@/searchParams';
 import { type SearchParams } from 'nuqs/server';
-import FormUpsertTag from '../_components/tag-upsert-form-dialog';
-import PostsView from './_posts-view';
-import TagsView from './_tags-view';
+import PostsView from './(views)/(posts)/posts-view';
+import TagsView from './(views)/(tags)/tags-view';
 
 type DashboardProps = {
 	searchParams: Promise<SearchParams>;
@@ -14,28 +9,11 @@ type DashboardProps = {
 
 export default async function Dashboard(props: DashboardProps) {
 	const searchParams = await props.searchParams;
-	const { view } = searchParams;
+	const { view } = viewCache.parse(searchParams);
 
 	if (view === 'tags') {
-		const { active: upsertActive, upsertId } =
-			upsertTagCache.parse(searchParams);
-		const tags = await getTags();
-		const tag = upsertId ? await getTagById(upsertId) : undefined;
-		return (
-			<>
-				<TagsView data={{ tags }} />
-				{upsertActive && <FormUpsertTag data={{ tag }} />}
-			</>
-		);
+		return <TagsView searchParams={searchParams} />;
 	}
 
-	const { field: orderBy, dir: orderDir } = orderCache.parse(searchParams);
-	const filter = postsFiltersCache.parse(searchParams);
-	const posts = await getPosts({
-		orderBy: orderBy as PostsOrderBy,
-		orderDir,
-		filter,
-	});
-	const tags = await getTags();
-	return <PostsView posts={posts} tags={tags} />;
+	return <PostsView searchParams={searchParams} />;
 }

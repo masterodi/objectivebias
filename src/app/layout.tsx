@@ -2,9 +2,9 @@ import Container from '@/components/container';
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next';
 import { ReactNode } from 'react';
-import Footer from './_components/footer';
-import Navbar from './_components/navbar';
+import Footer from './footer';
 import './globals.css';
+import Navbar from './navbar';
 import Providers from './providers';
 
 export const metadata: Metadata = {

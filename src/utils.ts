@@ -1,25 +1,6 @@
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export const ORDER_DIR_NAME = 'order-dir';
-export const ORDER_DIR = {
-	asc: 'asc',
-	desc: 'desc',
-};
-export const ORDER_BY_NAME = 'order-by';
-
-export const TAG_FILTER_NAME = 'tag';
-
-export const UPSERT_NAME = 'upsert';
-export const UPSERT_ID_NAME = 'upsert-id';
-
-export const DASHBOARD_POSTS_VIEW_URL = '/admin/dashboard?view=posts';
-export const DASHBOARD_TAGS_VIEW_URL = '/admin/dashboard?view=tags';
-
-export const CREATE_TAG_URL = `/admin/dashboard?view=tags&${UPSERT_NAME}=true`;
-export const UPDATE_TAG_URL = (tagId: string) =>
-	`/admin/dashboard?view=tags&${UPSERT_NAME}=true&${UPSERT_ID_NAME}=${tagId}`;
-
 export const ORDER_OPTIONS = [
 	{ label: 'Title', value: 'title:asc' },
 	{ label: 'Title DESC', value: 'title:desc' },

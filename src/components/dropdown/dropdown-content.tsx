@@ -12,7 +12,6 @@ export default function DropdownContent({
 }: DropdownContentProps) {
 	return (
 		<div
-			tabIndex={0}
 			className={cn(
 				'dropdown-content z-[1] rounded-md bg-base-300',
 				className

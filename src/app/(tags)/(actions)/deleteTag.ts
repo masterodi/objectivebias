@@ -3,7 +3,7 @@
 import db, { tags } from '@/db';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
-import validateRequest from '../_queries/validateRequest.query';
+import validateRequest from '../../(users)/(queries)/validateRequest';
 
 export default async function deleteTag(tagId: string) {
 	const { session } = await validateRequest();

@@ -5,8 +5,8 @@ import { TagCreatePayloadSchema, validate } from '@/schemas';
 import { TagCreatePayload, TagInsert } from '@/types';
 import { createSlug } from '@/utils';
 import { revalidatePath } from 'next/cache';
-import getTagBySlug from '../_queries/getTagBySlug.query';
-import validateRequest from '../_queries/validateRequest.query';
+import getTagBySlug from '../(queries)/getTagBySlug';
+import validateRequest from '../../(users)/(queries)/validateRequest';
 
 const upsertTag = async (props: { id?: string; payload: TagCreatePayload }) => {
 	const { session, user } = await validateRequest();

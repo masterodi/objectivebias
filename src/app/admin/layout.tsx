@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import validateRequest from '../_queries/validateRequest.query';
+import validateRequest from '../(users)/(queries)/validateRequest';
 
-type AdminLayoutProps = Readonly<{ children: React.ReactNode }>;
+type AdminLayoutProps = { children: React.ReactNode };
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
 	const { session, user } = await validateRequest();

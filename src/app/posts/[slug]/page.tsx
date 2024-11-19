@@ -1,4 +1,4 @@
-import getPostBySlug from '@/app/_queries/getPostBySlug.query';
+import getPostBySlug from '@/app/(posts)/(queries)/getPostBySlug';
 import Badge from '@/components/badge';
 import MarkdownRenderer from '@/components/markdown-renderer';
 

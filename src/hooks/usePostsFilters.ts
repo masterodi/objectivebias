@@ -1,16 +1,19 @@
 import { postsFiltersParsers, postsFiltersUrlKeys } from '@/searchParams';
 import { useQueryStates } from 'nuqs';
 
-const useFilters = () => {
-	const [filters, setFilters] = useQueryStates(postsFiltersParsers, {
-		shallow: false,
-		history: 'push',
-		clearOnDefault: false,
-		urlKeys: postsFiltersUrlKeys,
-	});
+const usePostsFilters = () => {
+	const [postsFilters, setPostsFilters] = useQueryStates(
+		postsFiltersParsers,
+		{
+			shallow: false,
+			history: 'push',
+			clearOnDefault: false,
+			urlKeys: postsFiltersUrlKeys,
+		}
+	);
 
 	const updateTag = (value: string, op: 'append' | 'remove') => {
-		setFilters((prev) => {
+		setPostsFilters((prev) => {
 			const newTag =
 				op === 'remove' ?
 					(prev.tag ?? []).filter((tag) => tag !== value)
@@ -21,14 +24,14 @@ const useFilters = () => {
 	};
 
 	const isTagInFilter = (value: string) => {
-		return !!filters.tag?.find((tg) => tg === value);
+		return !!postsFilters.tag?.find((tg) => tg === value);
 	};
 
 	return {
-		value: filters,
+		filters: postsFilters,
 		updateTag,
 		isTagInFilter,
 	};
 };
 
-export default useFilters;
+export default usePostsFilters;

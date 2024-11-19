@@ -2,7 +2,7 @@
 
 import Tab from '@/components/tabs/tab';
 import Tablist from '@/components/tabs/tablist';
-import { DASHBOARD_POSTS_VIEW_URL, DASHBOARD_TAGS_VIEW_URL } from '@/utils';
+import { URLS } from '@/urls';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -18,12 +18,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 		<div className="flex flex-col gap-4">
 			<Tablist>
 				<Tab active={searchParams.get('view') !== 'tags'}>
-					<Link href={DASHBOARD_POSTS_VIEW_URL} className="w-full">
+					<Link href={URLS.POSTS_VIEW_DASHBOARD} className="w-full">
 						Posts
 					</Link>
 				</Tab>
 				<Tab active={searchParams.get('view') === 'tags'}>
-					<Link href={DASHBOARD_TAGS_VIEW_URL} className="w-full">
+					<Link href={URLS.TAGS_VIEW_DASHBOARD} className="w-full">
 						Tags
 					</Link>
 				</Tab>

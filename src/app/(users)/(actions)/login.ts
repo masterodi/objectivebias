@@ -6,7 +6,7 @@ import { LoginPayload } from '@/types';
 import { verify } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import getUserByUsername from '../_queries/getUserByUsername.query';
+import getUserByUsername from '../(queries)/getUserByUsername';
 
 export default async function login(payload: LoginPayload) {
 	const { data, error } = await validate(payload, LoginPayloadSchema);

@@ -3,7 +3,7 @@
 import db, { posts } from '@/db';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
-import validateRequest from '../_queries/validateRequest.query';
+import validateRequest from '../../(users)/(queries)/validateRequest';
 
 export default async function deletePost(postId: string) {
 	const { session, user } = await validateRequest();

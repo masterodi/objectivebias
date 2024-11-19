@@ -10,8 +10,6 @@ type GetPostsConfig = {
 };
 
 export default async function getPosts(config?: GetPostsConfig) {
-	console.log({ config });
-
 	const { orderBy = 'createdAt', orderDir, filter } = config ?? {};
 
 	const posts = await db.query.posts.findMany({
@@ -38,8 +36,6 @@ export default async function getPosts(config?: GetPostsConfig) {
 			return dirFn(model[orderBy]);
 		},
 	});
-
-	console.log({ posts });
 
 	return posts.map((post) => {
 		const { tagsToPosts, ...rest } = post;

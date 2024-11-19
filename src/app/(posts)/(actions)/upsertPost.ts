@@ -6,8 +6,8 @@ import { PostCreatePayload, PostInsert } from '@/types';
 import { createSlug } from '@/utils';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
-import getPostBySlug from '../_queries/getPostBySlug.query';
-import validateRequest from '../_queries/validateRequest.query';
+import getPostBySlug from '../(queries)/getPostBySlug';
+import validateRequest from '../../(users)/(queries)/validateRequest';
 
 const upsertPost = async (props: {
 	id?: string;

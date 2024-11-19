@@ -1,23 +1,18 @@
-import getTags from '@/app/_queries/getTags.query';
-import validateRequest from '@/app/_queries/validateRequest.query';
-import { redirect } from 'next/navigation';
-import FormUpsertPost from '../../_components/post-upsert-form';
+import getTags from '@/app/(tags)/(queries)/getTags';
+import Center from '@/components/center';
+import { PostUpsertData } from '@/types';
+import FormUpsertPost from '../../(posts)/post-upsert-form';
 
 export default async function CreatePost() {
-	const { session } = await validateRequest();
-
-	if (!session) {
-		return redirect('/login');
-	}
-
 	const tags = (await getTags()).map((tag) => ({
 		label: tag.name,
 		value: tag.id,
 	}));
+	const data: PostUpsertData = { tags };
 
 	return (
-		<div className="container mx-auto max-w-6xl p-4">
-			<FormUpsertPost data={{ tags }} />
-		</div>
+		<Center>
+			<FormUpsertPost data={data} />
+		</Center>
 	);
 }

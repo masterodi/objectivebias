@@ -10,6 +10,18 @@ const compat = new FlatCompat({
 	recommendedConfig: js.configs.recommended,
 	allConfig: js.configs.all,
 });
-export default [
+
+/**
+ * @type {Linter.Config[]}
+ */
+const config = [
 	...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
+	{
+		rules: {
+			'no-unused-vars': 'off',
+			'@typescript-eslint/no-unused-vars': 'warn',
+		},
+	},
 ];
+
+export default config;

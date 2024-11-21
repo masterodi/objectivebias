@@ -38,7 +38,7 @@ export default function RegisterForm() {
 	return (
 		<form
 			onSubmit={handleRegister}
-			className="flex w-full flex-col gap-8 rounded-md bg-base-300 p-8 shadow-lg"
+			className="mx-auto flex w-full max-w-xl flex-col gap-8 rounded-md bg-base-200 p-8 shadow-sm"
 		>
 			<h1 className="text-3xl font-bold">Create account</h1>
 			<InputField

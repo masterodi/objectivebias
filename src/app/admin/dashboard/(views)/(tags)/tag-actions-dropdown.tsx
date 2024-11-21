@@ -39,6 +39,7 @@ const TagActionsDropdown = ({ tag }: { tag: Tag }) => {
 					<li>
 						<Link
 							href={URLS.TAG_UPSERT(tag.id)}
+							scroll={false}
 							className="flex gap-2"
 						>
 							<Edit /> Edit

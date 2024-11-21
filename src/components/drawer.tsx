@@ -38,7 +38,7 @@ export default function Drawer({ children, toggler, id }: DrawerProps) {
 					aria-label="close sidebar"
 					className="drawer-overlay"
 				></label>
-				<div className="flex min-h-full w-60 bg-base-300 md:w-80 [&>*]:flex-1">
+				<div className="flex min-h-full w-1/2 max-w-md bg-base-300 [&>*]:flex-1">
 					{children}
 				</div>
 			</div>

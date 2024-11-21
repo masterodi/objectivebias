@@ -36,7 +36,7 @@ export default function LoginForm() {
 	return (
 		<form
 			onSubmit={handleLogin}
-			className="flex w-full flex-col gap-8 rounded-md bg-base-300 p-8 shadow-lg"
+			className="mx-auto flex w-full max-w-xl flex-col gap-8 rounded-md bg-base-200 p-8 shadow-sm"
 		>
 			<h1 className="text-3xl font-bold">Enter account</h1>
 			<InputField
@@ -59,7 +59,7 @@ export default function LoginForm() {
 			<Button type="submit" variant="primary" loading={isPending}>
 				Log In
 			</Button>
-			<Link href="/register" className="btn btn-neutral">
+			<Link href="/register" className="btn btn-ghost">
 				I want to create an account
 			</Link>
 		</form>

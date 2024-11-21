@@ -41,6 +41,7 @@ const TagsView = async ({ searchParams }: TagsViewProps) => {
 			<div className="toast">
 				<Link
 					href={URLS.TAG_UPSERT()}
+					scroll={false}
 					className="btn btn-square btn-accent"
 				>
 					<Plus />

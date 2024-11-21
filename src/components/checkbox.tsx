@@ -1,14 +1,28 @@
+import { cn } from '@/utils';
 import { InputHTMLAttributes } from 'react';
 
 type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
 	label?: string;
+	textClassName?: string;
 };
 
-const Checkbox = ({ label, type, className, ...rest }: CheckboxProps) => {
+const Checkbox = ({
+	label,
+	textClassName,
+	type,
+	className,
+	...rest
+}: CheckboxProps) => {
 	return (
 		<label className="label cursor-pointer">
-			{label && <span className="label-text">{label}</span>}
-			<input type="checkbox" className="checkbox" {...rest} />
+			{label && (
+				<span className={cn('label-text', textClassName)}>{label}</span>
+			)}
+			<input
+				type="checkbox"
+				className={cn('checkbox', className)}
+				{...rest}
+			/>
 		</label>
 	);
 };

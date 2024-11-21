@@ -6,8 +6,6 @@ export const ORDER_OPTIONS = [
 	{ label: 'Title DESC', value: 'title:desc' },
 	{ label: 'Slug', value: 'slug:asc' },
 	{ label: 'Slug DESC', value: 'slug:desc' },
-	{ label: 'Created By', value: 'createdBy:asc' },
-	{ label: 'Created By DESC', value: 'createdBy:desc' },
 	{ label: 'Created At', value: 'createdAt:asc' },
 	{ label: 'Created At DESC', value: 'createdAt:desc' },
 	{ label: 'Updated At', value: 'updatedAt:asc' },

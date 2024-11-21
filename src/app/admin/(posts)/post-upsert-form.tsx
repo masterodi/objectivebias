@@ -117,7 +117,7 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 					</button>
 				}
 			/>
-			<Button type="submit" loading={isPending}>
+			<Button type="submit" variant="accent" loading={isPending}>
 				{isUpdate ? 'Update' : 'Publish'}
 			</Button>
 		</form>

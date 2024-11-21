@@ -6,7 +6,7 @@ import SelectField from '@/components/fields/select-field';
 import usePostsFilters from '@/hooks/usePostsFilters';
 import usePostsOrder from '@/hooks/usePostsOrder';
 import { Tag } from '@/types';
-import { ORDER_OPTIONS } from '@/utils';
+import { cn, ORDER_OPTIONS } from '@/utils';
 import { Settings2 } from 'lucide-react';
 import { ChangeEventHandler } from 'react';
 
@@ -74,6 +74,10 @@ const TagFilterSection = ({ tags }: TagFilterSectionProps) => {
 						checked={filters.isTagInFilter(tag.slug)}
 						value={tag.slug}
 						onChange={updateTagFilter}
+						textClassName={cn(
+							filters.isTagInFilter(tag.slug) &&
+								'text-accent font-semibold'
+						)}
 					/>
 				))}
 			</div>

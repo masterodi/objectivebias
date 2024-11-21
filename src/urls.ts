@@ -5,6 +5,6 @@ export const URLS = {
 	TAGS_VIEW_DASHBOARD: '/admin/dashboard?view=tags',
 	TAG_UPSERT: (tagId?: string) =>
 		tagId ?
-			`/admin/dashboard?view=tags&${UPSERT_NAME}=true`
-		:	`/admin/dashboard?view=tags&${UPSERT_NAME}=true&${UPSERT_ID_NAME}=${tagId}`,
+			`/admin/dashboard?view=tags&${UPSERT_NAME}=true&${UPSERT_ID_NAME}=${tagId}`
+		:	`/admin/dashboard?view=tags&${UPSERT_NAME}=true`,
 };

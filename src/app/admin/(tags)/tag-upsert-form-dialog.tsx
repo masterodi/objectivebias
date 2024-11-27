@@ -14,8 +14,6 @@ import { FormEventHandler, useTransition } from 'react';
 const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 	const { tag } = data ?? {};
 	const isUpdate = !!tag;
-	console.log(isUpdate);
-
 	const upsertModal = useUpsertModal();
 	const toast = useToast();
 	const [isPending, startTransition] = useTransition();

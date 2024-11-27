@@ -91,7 +91,7 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 				value={fields.title}
 				onChange={handleFieldChange}
 				error={errors?.title}
-				className="input-lg text-4xl"
+				className="input-lg"
 			/>
 			<MarkdownEditor
 				name="body"

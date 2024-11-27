@@ -97,6 +97,7 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 				name="body"
 				value={fields.body}
 				onChange={handleFieldChange}
+				error={errors?.body}
 			/>
 			<AutocompleteMultipleInputField
 				label="Choose tags"

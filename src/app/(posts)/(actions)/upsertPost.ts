@@ -21,6 +21,7 @@ const upsertPost = async (props: {
 	const { id, payload } = props;
 
 	const { data, error } = await validate(payload, PostCreatePayloadSchema);
+
 	if (error) {
 		return { validationError: error.toJson() };
 	}

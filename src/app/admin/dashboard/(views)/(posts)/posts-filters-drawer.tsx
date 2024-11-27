@@ -19,9 +19,12 @@ const PostsFiltersDrawer = ({ tags }: PostsFilterDrawerProps) => {
 			id="posts-filters-drawer"
 			toggler={
 				<div className="toast">
-					<div className="btn btn-square btn-accent">
+					<label
+						htmlFor="posts-filters-drawer"
+						className="btn btn-square btn-accent"
+					>
 						<Settings2 />
-					</div>
+					</label>
 				</div>
 			}
 		>

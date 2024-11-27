@@ -1,35 +1,40 @@
-import { ReactNode } from 'react';
+import { Menu } from 'lucide-react';
+import { ChangeEvent, ReactNode } from 'react';
 
 type DrawerProps = {
 	children: ReactNode;
 	toggler?: ReactNode;
+	isOpen?: boolean;
+	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	id: string;
 };
 
-export default function Drawer({ children, toggler, id }: DrawerProps) {
+export default function Drawer({
+	children,
+	toggler,
+	isOpen,
+	onChange,
+	id,
+}: DrawerProps) {
 	return (
 		<div className="drawer drawer-end w-auto">
-			<input id={id} type="checkbox" className="drawer-toggle" />
+			<input
+				id={id}
+				type="checkbox"
+				checked={isOpen}
+				onChange={onChange}
+				className="drawer-toggle"
+			/>
 			<div className="drawer-content">
-				<label htmlFor={id} aria-label="open sidebar">
-					{toggler ?? (
-						<span className="btn btn-square btn-ghost">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								className="inline-block h-6 w-6 stroke-current"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
-									d="M4 6h16M4 12h16M4 18h16"
-								></path>
-							</svg>
-						</span>
-					)}
-				</label>
+				{toggler ?? (
+					<label
+						htmlFor={id}
+						aria-label="open sidebar"
+						className="btn btn-square btn-ghost"
+					>
+						<Menu />
+					</label>
+				)}
 			</div>
 
 			<div className="drawer-side z-20">
@@ -38,7 +43,7 @@ export default function Drawer({ children, toggler, id }: DrawerProps) {
 					aria-label="close sidebar"
 					className="drawer-overlay"
 				></label>
-				<div className="flex min-h-full w-1/2 max-w-md bg-base-300 [&>*]:flex-1">
+				<div className="flex min-h-full w-3/4 max-w-md bg-base-300 [&>*]:flex-1">
 					{children}
 				</div>
 			</div>

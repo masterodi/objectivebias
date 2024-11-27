@@ -1,9 +1,8 @@
-import Drawer from '@/components/drawer';
 import { User } from 'lucia';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import logout from './(users)/(actions)/logout';
 import getUser from './(users)/(queries)/getUser';
+import NavDrawer from './nav-drawer';
 
 const SITE_NAME = 'ObjectiveBias';
 
@@ -31,7 +30,7 @@ function GuestNavbar() {
 	);
 }
 
-async function UserNavbar({ user }: { user: User }) {
+function UserNavbar({ user }: { user: User }) {
 	return (
 		<nav className="navbar sticky top-4 z-10 mx-4 mt-4 w-auto rounded-md bg-base-300">
 			<div className="navbar-start">
@@ -44,41 +43,5 @@ async function UserNavbar({ user }: { user: User }) {
 				<NavDrawer user={user} />
 			</div>
 		</nav>
-	);
-}
-
-function NavDrawer({ user }: { user: User }) {
-	return (
-		<Drawer id="nav-drawer">
-			<div className="flex flex-col gap-2 p-4">
-				{user.role === 'moderator' && (
-					<div className="grid gap-4">
-						<Link
-							href="/admin/dashboard?view=posts"
-							className="btn btn-ghost"
-						>
-							View Posts
-						</Link>
-						<Link
-							href="/admin/posts/create"
-							className="btn btn-ghost"
-						>
-							Create a new post
-						</Link>
-						<Link
-							href="/admin/dashboard?view=tags"
-							className="btn btn-ghost"
-						>
-							View Tags
-						</Link>
-					</div>
-				)}
-				<form action={logout} className="mt-auto">
-					<button type="submit" className="btn btn-warning w-full">
-						Log Out
-					</button>
-				</form>
-			</div>
-		</Drawer>
 	);
 }

@@ -10,4 +10,4 @@
 -   [x] Build an admin dashboard
 -   [x] Let admins visualize existing posts/tags
 -   [x] Let admins manage exising posts/tags
--   [ ] Allow image upload for posts
+-   [x] Allow image upload for posts (pasting images will upload them)

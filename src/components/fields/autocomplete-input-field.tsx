@@ -27,6 +27,7 @@ type AutocompleteInputFieldProps<T, M = false> = {
 	:	AutocompleteOption<T>;
 	id?: string;
 	name?: string;
+	disabled?: boolean;
 };
 
 export function AutocompleteInputFieldProps<T>({
@@ -41,6 +42,7 @@ export function AutocompleteInputFieldProps<T>({
 	defaultValue,
 	id,
 	name,
+	disabled,
 }: AutocompleteInputFieldProps<T>) {
 	const isControlled = typeof inputValue !== 'undefined';
 	const isInputControlled = typeof value !== 'undefined';
@@ -70,7 +72,8 @@ export function AutocompleteInputFieldProps<T>({
 				<div
 					className={cn(
 						`input input-bordered flex flex-wrap items-center gap-2`,
-						error && 'input-error'
+						error && 'input-error',
+						disabled && 'input-disabled'
 					)}
 				>
 					<input
@@ -121,6 +124,7 @@ export function AutocompleteMultipleInputField<T>({
 	defaultValue,
 	id,
 	name,
+	disabled,
 	fallback,
 }: AutocompleteInputFieldProps<T, true> & { fallback?: ReactNode }) {
 	const isControlled = typeof value !== 'undefined';
@@ -174,7 +178,8 @@ export function AutocompleteMultipleInputField<T>({
 					tabIndex={0}
 					className={cn(
 						'input input-bordered flex h-auto min-h-12 flex-wrap items-center gap-2 py-2',
-						error && 'input-error'
+						error && 'input-error',
+						disabled && 'input-disabled'
 					)}
 				>
 					<SelectedOptionsList

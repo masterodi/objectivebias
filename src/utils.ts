@@ -63,3 +63,18 @@ export const getMdDescription = (md: string) => {
 
 	return '';
 };
+
+export const insertText = (textarea: HTMLTextAreaElement, text: string) => {
+	const start = textarea.selectionStart;
+	const before = textarea.value.substring(0, start);
+	const after = textarea.value.substring(start, textarea.value.length);
+	textarea.value = before + text + after;
+	textarea.selectionStart = textarea.selectionEnd = start + text.length;
+};
+
+export const insertMdImage = (
+	textarea: HTMLTextAreaElement,
+	imageUrl: string
+) => {
+	insertText(textarea, `![add description](${imageUrl})`);
+};

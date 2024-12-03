@@ -1,20 +1,16 @@
 'use client';
 
 import upsertPost from '@/app/(posts)/(actions)/upsertPost';
-import upsertTag from '@/app/(tags)/(actions)/upsertTag';
 import Button from '@/components/button';
-import {
-	AutocompleteMultipleInputField,
-	AutocompleteOption,
-} from '@/components/fields/autocomplete-input-field';
+import { AutocompleteOption } from '@/components/fields/autocomplete-input-field';
 import InputField from '@/components/fields/input-field';
-import MarkdownEditor from '@/components/markdown-editor';
 import { useToast } from '@/components/toast';
 import useChangeEventHandler from '@/hooks/useChangeEventHandler';
 import useFields from '@/hooks/useFields';
-import { PostUpsertData } from '@/types';
-import { Plus } from 'lucide-react';
+import { PostCreatePayload, PostUpsertData } from '@/types';
 import { FormEventHandler, useTransition } from 'react';
+import PostMarkdownEditor from './post-markdown-editor';
+import PostTagsAutocompleteField from './post-tags-autocomplete-field';
 
 type PostUpsertFormProps = {
 	data: PostUpsertData;
@@ -34,6 +30,13 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 
 	const handleFieldChange = useChangeEventHandler(setFields);
 
+	const handleContentChange = (newValue: string) => {
+		setFields((prev) => ({
+			...prev,
+			body: newValue,
+		}));
+	};
+
 	const handleAutocompleteFieldChange = (
 		newTags: AutocompleteOption<string>[] | null
 	) => {
@@ -44,40 +47,22 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 	const handleUpsert: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
+		const payload: PostCreatePayload = {
+			title: fields.title,
+			body: fields.body,
+			tags: fields.tags.map((tag) => tag.value),
+		};
+
 		startTransition(async () => {
 			const { validationError, error } = await upsertPost({
 				id: post?.id,
-				payload: {
-					title: fields.title,
-					body: fields.body,
-					tags: fields.tags.map((tag) => tag.value),
-				},
+				payload,
 			});
 
 			setErrors(validationError?.details);
 
 			if (error) {
 				toast.error(error);
-			}
-		});
-	};
-
-	const handleCreateAndAddTag = () => {
-		startTransition(async () => {
-			const res = await upsertTag({
-				payload: { name: fields.tagInput },
-			});
-
-			if (res.error) {
-				toast.error(res.error);
-			}
-
-			if (res.success) {
-				toast.success('Tag created and added');
-				handleAutocompleteFieldChange([
-					...fields.tags,
-					{ label: res.data.name, value: res.data.id },
-				]);
 			}
 		});
 	};
@@ -93,14 +78,14 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 				error={errors?.title}
 				className="input-lg"
 			/>
-			<MarkdownEditor
+			<PostMarkdownEditor
 				name="body"
+				id="body-editor"
 				value={fields.body}
-				onChange={handleFieldChange}
+				onChange={handleContentChange}
 				error={errors?.body}
 			/>
-			<AutocompleteMultipleInputField
-				label="Choose tags"
+			<PostTagsAutocompleteField
 				name="tagInput"
 				options={tags}
 				inputValue={fields.tagInput}
@@ -108,15 +93,6 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 				value={fields.tags}
 				onChange={handleAutocompleteFieldChange}
 				error={errors?.tags}
-				fallback={
-					<button
-						type="button"
-						disabled={isPending}
-						onClick={handleCreateAndAddTag}
-					>
-						<Plus /> Create and add tag
-					</button>
-				}
 			/>
 			<Button type="submit" variant="accent" loading={isPending}>
 				{isUpdate ? 'Update' : 'Publish'}

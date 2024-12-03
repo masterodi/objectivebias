@@ -9,16 +9,11 @@ import { redirect } from 'next/navigation';
 import getPostBySlug from '../(queries)/getPostBySlug';
 import validateRequest from '../../(users)/(queries)/validateRequest';
 
-const upsertPost = async (props: {
-	id?: string;
-	payload: PostCreatePayload;
-}) => {
+const upsertPost = async (payload: PostCreatePayload, id?: string) => {
 	const { session, user } = await validateRequest();
 	if (!session || user.role !== 'moderator') {
 		return { error: 'Unauthorized' };
 	}
-
-	const { id, payload } = props;
 
 	const { data, error } = await validate(payload, PostCreatePayloadSchema);
 

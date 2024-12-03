@@ -54,10 +54,10 @@ const PostUpsertForm = ({ data }: PostUpsertFormProps) => {
 		};
 
 		startTransition(async () => {
-			const { validationError, error } = await upsertPost({
-				id: post?.id,
+			const { validationError, error } = await upsertPost(
 				payload,
-			});
+				post?.id
+			);
 
 			setErrors(validationError?.details);
 

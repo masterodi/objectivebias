@@ -27,10 +27,10 @@ const TagUpsertFormDialog = ({ data }: { data?: TagUpsertData }) => {
 		e.preventDefault();
 
 		startTransition(async () => {
-			const { validationError, error, success } = await upsertTag({
-				id: tag?.id,
-				payload: fields,
-			});
+			const { validationError, error, success } = await upsertTag(
+				fields,
+				tag?.id
+			);
 
 			setErrors(validationError?.details);
 

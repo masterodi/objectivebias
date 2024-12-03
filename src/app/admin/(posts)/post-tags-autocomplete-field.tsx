@@ -6,6 +6,7 @@ import {
 	AutocompleteOption,
 } from '@/components/fields/autocomplete-input-field';
 import { useToast } from '@/components/toast';
+import { TagCreatePayload } from '@/types';
 import { Plus } from 'lucide-react';
 import { ChangeEventHandler, useTransition } from 'react';
 
@@ -33,9 +34,8 @@ const PostTagsAutocompleteField = ({
 
 	const handleCreateAndAddTag = () => {
 		startTransition(async () => {
-			const res = await upsertTag({
-				payload: { name: inputValue },
-			});
+			const payload: TagCreatePayload = { name: inputValue };
+			const res = await upsertTag(payload);
 
 			if (res.error) {
 				toast.error(res.error);
@@ -43,10 +43,9 @@ const PostTagsAutocompleteField = ({
 
 			if (res.success) {
 				toast.success('Tag created and added');
-				onChange([
-					...value,
-					{ label: res.data.name, value: res.data.id },
-				]);
+				const { name, id } = res.data;
+				const newValue = [...value, { label: name, value: id }];
+				onChange(newValue);
 			}
 		});
 	};

@@ -8,13 +8,11 @@ import { revalidatePath } from 'next/cache';
 import getTagBySlug from '../(queries)/getTagBySlug';
 import validateRequest from '../../(users)/(queries)/validateRequest';
 
-const upsertTag = async (props: { id?: string; payload: TagCreatePayload }) => {
+const upsertTag = async (payload: TagCreatePayload, id?: string) => {
 	const { session, user } = await validateRequest();
 	if (!session || user.role !== 'moderator') {
 		return { error: 'Unauthorized' };
 	}
-
-	const { id, payload } = props;
 
 	const { data, error } = await validate(payload, TagCreatePayloadSchema);
 	if (error) {

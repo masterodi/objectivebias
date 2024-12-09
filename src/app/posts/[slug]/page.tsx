@@ -31,8 +31,6 @@ export default async function Post(props: PostProps) {
 				</div>
 				<h6>
 					{new Date(post.createdAt).toLocaleString()}, <br />
-					<strong>edited:</strong>{' '}
-					{new Date(post.updatedAt).toLocaleString()}
 				</h6>
 				<h6></h6>
 			</header>

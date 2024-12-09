@@ -27,10 +27,6 @@ const PostCard = ({ post }: { post: PostWithTagsWithUser }) => {
 					<h4 className="font-bold">Created At</h4>
 					<span>{getDate(post.createdAt)}</span>
 				</div>
-				<div className="flex justify-between gap-2">
-					<h4 className="font-bold">Updated At</h4>
-					<span>{getDate(post.updatedAt)}</span>
-				</div>
 			</div>
 			<div className="card-actions justify-end p-1">
 				<PostActionsDropdowns post={post} />
